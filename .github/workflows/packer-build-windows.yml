@@ -5,9 +5,9 @@ on:
     branches:
       - cem/runnerimage
 
-defaults:
-  run:
-    shell: pwsh
+# defaults:
+#   run:
+#     shell: pwsh
 
 jobs:
   packer:
