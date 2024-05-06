@@ -1,0 +1,42 @@
+name: Build Linux Packer Image
+
+on:
+  push:
+    branches:
+      - none # Change this to your branch name if needed
+
+jobs:
+  packer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: BuildAgentIP
+        id: BuildAgentIP
+        run: |
+          ipaddress=$(curl -s http://ipinfo.io/ip)
+          echo "::set-output name=address::$ipaddress"
+
+      - name: packer build
+        run: |
+          cd images/ubuntu/templates
+          packer init ./ubuntu-minimal.pkr.hcl
+          packer validate  ./ubuntu-minimal.pkr.hcl
+          packer build ./ubuntu-minimal.pkr.hcl
+        env:
+          # ARM_CLIENT_CERT_PATH: ${{ secrets.ARM_CLIENT_CERT_PATH }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          # ARM_RESOURCE_LOCATION: ${{ secrets.ARM_RESOURCE_LOCATION }}
+          ARM_RESOURCE_GROUP: ${{ secrets.ARM_RESOURCE_GROUP }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          BUILD_RESOURCE_GROUP_NAME: ${{ secrets.BUILD_RESOURCE_GROUP_NAME }}
+          # TEMP_RESOURCE_GROUP_NAME: ${{ secrets.TEMP_RESOURCE_GROUP_NAME }}
+          ALLOWED_INBOUND_IP_ADRESSES: ${{ steps.BuildAgentIP.outputs.address }}
+          # VNET_NAME: ${{ secrets.VNET_NAME }}
+          # VNET_RESOURCE_GROUP: ${{ secrets.VNET_RESOURCE_GROUP }}
+          # VNET_SUBNET: ${{ secrets.VNET_SUBNET }}

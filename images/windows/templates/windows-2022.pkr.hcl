@@ -3,6 +3,7 @@ packer {
     azure = {
       source  = "github.com/hashicorp/azure"
       version = "1.4.5"
+      
     }
   }
 }
@@ -18,7 +19,7 @@ variable "agent_tools_directory" {
 
 variable "allowed_inbound_ip_addresses" {
   type    = list(string)
-  default = []
+  default = ["${env("ALLOWED_INBOUND_IP_ADRESSES")}"]
 }
 
 variable "azure_tags" {
@@ -145,7 +146,7 @@ variable "virtual_network_subnet_name" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_F8s_v2"
+  default = "Standard_B2s"
 }
 
 source "azure-arm" "image" {
@@ -163,7 +164,7 @@ source "azure-arm" "image" {
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
   object_id                              = "${var.object_id}"
-  os_disk_size_gb                        = "256"
+  os_disk_size_gb                        = "128"
   os_type                                = "Windows"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
@@ -275,7 +276,8 @@ build {
       "${path.root}/../scripts/build/Install-DockerCompose.ps1",
       "${path.root}/../scripts/build/Install-PowershellCore.ps1",
       "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
-      "${path.root}/../scripts/build/Install-Runner.ps1"
+      "${path.root}/../scripts/build/Install-Runner.ps1",
+      "${path.root}/../scripts/build/Install-Winzip.ps1"
     ]
   }
 
