@@ -11,7 +11,7 @@ on:
 
 jobs:
   packer:
-    runs-on: self-hosted
+    runs-on: windows-latest
     timeout-minutes: 60
 
     steps:
