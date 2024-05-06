@@ -3,7 +3,7 @@ name: Build Window Packer Image
 on:
   push:
     branches:
-      - main # Change this to your branch name if needed
+      - cem/runnerimage
 
 defaults:
   run:

@@ -3,7 +3,7 @@ name: Build Linux Packer Image
 on:
   push:
     branches:
-      - none # Change this to your branch name if needed
+      - cem/runnerimage
 
 jobs:
   packer:
