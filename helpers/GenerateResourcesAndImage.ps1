@@ -105,6 +105,12 @@ Function GenerateResourcesAndImage {
         .PARAMETER ReuseResourceGroup
             Reuse the resource group if it exists without user confirmation.
             This parameter is deprecated and will be removed in a future release.
+        .PARAMETER VirtualNetworkName
+            The name of the virtual network to connect to
+        .PARAMETER VirtualNetworkResourceGroupName
+            The resource group the virtual network can be found in
+        .PARAMETER VirtualNetworkSubnetName
+            The name of the subnet in the virtual network to use
         .PARAMETER OnError
             Specify how packer handles an error during image creation.
             Options:
@@ -120,6 +126,12 @@ Function GenerateResourcesAndImage {
     #>
     param (
          [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkResourceGroupName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkSubnetName,
+        [Parameter(Mandatory = $True)]
         [string] $VirtualNetworkName,
         [Parameter(Mandatory = $True)]
         [string] $VirtualNetworkResourceGroupName,
