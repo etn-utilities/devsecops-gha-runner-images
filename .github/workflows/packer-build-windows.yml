@@ -32,14 +32,14 @@ jobs:
           packer build  -debug ./windows-2022.pkr.hcl
         env:
           # ARM_CLIENT_CERT_PATH: ${{ secrets.ARM_CLIENT_CERT_PATH }}
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_CLIENT_ID: "52563be7-6764-4964-b3dc-beb18e7623d2"
+          ARM_CLIENT_SECRET: ~H48Q~tiI1SZXH~GNq8SdqSI_9yXS124.GjHNb8Q
           IMAGE_VERSION: ${{ env.GITHUB_RUN_ID }}-dev
           # ARM_RESOURCE_LOCATION: ${{ secrets.ARM_RESOURCE_LOCATION }}
-          ARM_RESOURCE_GROUP: ${{ secrets.ARM_RESOURCE_GROUP }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-          BUILD_RESOURCE_GROUP_NAME: ${{ secrets.BUILD_RESOURCE_GROUP_NAME }}
+          ARM_RESOURCE_GROUP: "ETN-POC-VTD-RUNNER"
+          ARM_SUBSCRIPTION_ID: 9013acaf-d6cc-4416-a9ed-7075ba759979
+          ARM_TENANT_ID: d6525c95-b906-431a-b926-e9b51ba43cc4
+          BUILD_RESOURCE_GROUP_NAME: "ETN-POC-VTD-RUNNER"
           # TEMP_RESOURCE_GROUP_NAME: ${{ secrets.TEMP_RESOURCE_GROUP_NAME }}
           #   ALLOWED_INBOUND_IP_ADRESSES: ${{ steps.BuildAgentIP.outputs.address }}
           VNET_NAME: ${{ secrets.VNET_NAME }}
