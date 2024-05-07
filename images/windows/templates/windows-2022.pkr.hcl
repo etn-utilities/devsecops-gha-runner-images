@@ -16,10 +16,10 @@ variable "agent_tools_directory" {
   default = "C:\\hostedtoolcache\\windows"
 }
 
-variable "allowed_inbound_ip_addresses" {
-  type    = list(string)
-  default = ["${env("ALLOWED_INBOUND_IP_ADRESSES")}"]
-}
+# variable "allowed_inbound_ip_addresses" {
+#   type    = list(string)
+#   default = ["${env("ALLOWED_INBOUND_IP_ADRESSES")}"]
+# }
 
 variable "azure_tags" {
   type    = map(string)
@@ -108,10 +108,10 @@ variable "object_id" {
   default = "${env("ARM_OBJECT_ID")}"
 }
 
-variable "private_virtual_network_with_public_ip" {
-  type    = bool
-  default = false
-}
+# variable "private_virtual_network_with_public_ip" {
+#   type    = bool
+#   default = false
+# }
 
 variable "subscription_id" {
   type    = string
@@ -171,7 +171,7 @@ source "azure-arm" "image" {
   object_id                              = "${var.object_id}"
   os_disk_size_gb                        = "128"
   os_type                                = "Windows"
-  private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
+  #private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
   temp_resource_group_name               = "${var.temp_resource_group_name}"
   tenant_id                              = "${var.tenant_id}"
@@ -181,13 +181,22 @@ source "azure-arm" "image" {
   vm_size                                = "${var.vm_size}"
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
+   winrm_timeout                         = "15m"
   winrm_username                         = "packer"
   
   shared_image_gallery_destination {
         resource_group ="${var.managed_image_resource_group_name}"
         gallery_name = "${var.shared_image_gallery_name}"
-        image_name = "WindowsTest1"
+        image_name = "Powershell-test"
         image_version = "1.1.2"
+   #build_resource_group_name = var.build_resource_group_name
+    #vm_size = var.build_vm_sku
+    #winrm_no_proxy = true
+
+    # networking parameters
+    # virtual_network_name = var.virtual_network_name
+    # virtual_network_subnet_name = var.virtual_network_subnet_name
+    # virtual_network_resource_group_name = var.infra_resource_group_name
 }
 
   dynamic "azure_tag" {
