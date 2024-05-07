@@ -105,6 +105,12 @@ Function GenerateResourcesAndImage {
         .PARAMETER ReuseResourceGroup
             Reuse the resource group if it exists without user confirmation.
             This parameter is deprecated and will be removed in a future release.
+        .PARAMETER VirtualNetworkName
+            The name of the virtual network to connect to
+        .PARAMETER VirtualNetworkResourceGroupName
+            The resource group the virtual network can be found in
+        .PARAMETER VirtualNetworkSubnetName
+            The name of the subnet in the virtual network to use
         .PARAMETER OnError
             Specify how packer handles an error during image creation.
             Options:
@@ -119,6 +125,12 @@ Function GenerateResourcesAndImage {
             GenerateResourcesAndImage -SubscriptionId {YourSubscriptionId} -ResourceGroupName "shsamytest1" -ImageGenerationRepositoryRoot "C:\runner-images" -ImageType Ubuntu2004 -AzureLocation "East US"
     #>
     param (
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkResourceGroupName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkSubnetName,
         [Parameter(Mandatory = $True)]
         [string] $SubscriptionId,
         [Parameter(Mandatory = $True)]
@@ -365,6 +377,9 @@ Function GenerateResourcesAndImage {
             -var "install_password=$($InstallPassword)" `
             -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
             -var "azure_tags=$($TagsJson)" `
+            -var "virtual_network_name=$($VirtualNetworkName)" `
+            -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
+            -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
             $TemplatePath
 
         if ($LastExitCode -ne 0) {
