@@ -2,7 +2,7 @@ packer {
   required_plugins {
     azure = {
       source  = "github.com/hashicorp/azure"
-      version = "1.8.0"
+      version = "1.4.5"
       
     }
   }
@@ -150,8 +150,9 @@ variable "vm_size" {
 }
 
 source "azure-arm" "image" {
-  allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
-  build_resource_group_name              = "${var.build_resource_group_name}"
+  #allowed_inbound_ip_addresses          = "${var.allowed_inbound_ip_addresses}"
+  build_resource_group_name              = "ETN-POC-VTD-RUNNER"
+  # gallery_name                           = "pakcercem"
   client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
@@ -159,7 +160,7 @@ source "azure-arm" "image" {
   image_offer                            = "WindowsServer"
   image_publisher                        = "MicrosoftWindowsServer"
   image_sku                              = "2022-Datacenter"
-  location                               = "${var.location}"
+  #location                               = "East US"
   managed_image_name                     = "${local.managed_image_name}"
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
@@ -177,6 +178,17 @@ source "azure-arm" "image" {
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
+  
+  shared_image_gallery_destination {
+        resource_group ="${var.managed_image_resource_group_name}"
+        gallery_name = var.shared_image_gallery_name
+        image_name = "WindowsTest1"
+        image_version = "1.1.2"
+        storage_account_type = var.shared_image_gallery_storage_account_type
+        target_region {
+            name = var.azure_region
+        }
+}
 
   dynamic "azure_tag" {
     for_each = var.azure_tags
@@ -189,6 +201,7 @@ source "azure-arm" "image" {
 
 build {
   sources = ["source.azure-arm.image"]
+  # gallery_name ="pakcercem"
 
   provisioner "powershell" {
     inline = ["New-Item -Path ${var.image_folder} -ItemType Directory -Force"]
