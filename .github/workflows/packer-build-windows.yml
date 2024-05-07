@@ -45,3 +45,4 @@ jobs:
           VNET_NAME: ${{ secrets.VNET_NAME }}
           VNET_RESOURCE_GROUP: ${{ secrets.VNET_RESOURCE_GROUP }}
           VNET_SUBNET: ${{ secrets.VNET_SUBNET }}
+          GALLERY_NAME: "pakcercem"

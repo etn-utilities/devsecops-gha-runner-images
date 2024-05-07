@@ -3,7 +3,6 @@ packer {
     azure = {
       source  = "github.com/hashicorp/azure"
       version = "1.4.5"
-      
     }
   }
 }
@@ -134,6 +133,11 @@ variable "virtual_network_name" {
   default = "${env("VNET_NAME")}"
 }
 
+variable "shared_image_gallery_name" {
+  type    = string
+  default = "${env("GALLERY_NAME")}"
+}
+
 variable "virtual_network_resource_group_name" {
   type    = string
   default = "${env("VNET_RESOURCE_GROUP")}"
@@ -181,13 +185,9 @@ source "azure-arm" "image" {
   
   shared_image_gallery_destination {
         resource_group ="${var.managed_image_resource_group_name}"
-        gallery_name = var.shared_image_gallery_name
+        gallery_name = "${var.shared_image_gallery_name}"
         image_name = "WindowsTest1"
         image_version = "1.1.2"
-        storage_account_type = var.shared_image_gallery_storage_account_type
-        target_region {
-            name = var.azure_region
-        }
 }
 
   dynamic "azure_tag" {
