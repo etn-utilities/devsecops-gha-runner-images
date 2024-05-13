@@ -179,6 +179,8 @@ source "azure-arm" "image" {
   virtual_network_resource_group_name    = "${var.virtual_network_resource_group_name}"
   virtual_network_subnet_name            = "${var.virtual_network_subnet_name}"
   vm_size                                = "${var.vm_size}"
+  user_data_file                         = "${path.root}/../scripts/build/Setup-Winrm.ps1"
+  custom_script                          = "powershell -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -Command \"$userData = (Invoke-RestMethod -Headers @{Metadata=$true} -Method GET -Uri http://169.254.169.254/metadata/instance/compute/userData?api-version=2021-01-01$([char]38)format=text); $contents = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($userData)); set-content -path c:\\Windows\\Temp\\setup-winrm.ps1 -value $contents; . c:\\Windows\\Temp\\setup-winrm.ps1;\""
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
   winrm_timeout                          = "30m"
