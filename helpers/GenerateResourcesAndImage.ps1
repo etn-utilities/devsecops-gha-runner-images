@@ -115,6 +115,12 @@ Function GenerateResourcesAndImage {
             GenerateResourcesAndImage -SubscriptionId {YourSubscriptionId} -ResourceGroupName "shsamytest1" -ImageGenerationRepositoryRoot "C:\runner-images" -ImageType Ubuntu2004 -AzureLocation "East US"
     #>
     param (
+         [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkResourceGroupName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkSubnetName,
         [Parameter(Mandatory = $True)]
         [string] $SubscriptionId,
         [Parameter(Mandatory = $True)]
@@ -193,6 +199,23 @@ Function GenerateResourcesAndImage {
     }
     Write-Debug "Allowed inbound IP addresses: $AllowedInboundIpAddresses."
 
+#     #Retrieve existing virtual network information
+#     $existingVirtualNetwork = Get-AzVirtualNetwork -Name $env:EXISTING_VIRTUAL_NETWORK -ResourceGroupName $env:EXISTING_RESOURCE_GROUP
+
+#     # Retrieve existing subnet information
+#     $existingSubnet = Get-AzVirtualNetworkSubnetConfig -VirtualNetwork $existingVirtualNetwork | Where-Object {$_.Name -eq $env:EXISTING_SUBNET}
+
+#     # Use the retrieved information in your Packer setup
+#     $subnetId = $existingSubnet.Id
+#     $virtualNetworkId = $existingVirtualNetwork.Id
+#     $resourceGroupName = $env:EXISTING_RESOURCE_GROUP
+
+# # Output for verification
+# Write-Host "Using existing virtual network: $($existingVirtualNetwork.Name)"
+# Write-Host "Using existing subnet: $($existingSubnet.Name)"
+# Write-Host "Using existing resource group: $resourceGroupName"
+    
+
     # Prepare tags
     $TagsList = $Tags.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }
     Write-Debug "Tags list: $TagsList."
@@ -222,11 +245,13 @@ Function GenerateResourcesAndImage {
         "-var=client_secret=fake" `
         "-var=subscription_id=$($SubscriptionId)" `
         "-var=tenant_id=fake" `
-        "-var=location=$($AzureLocation)" `
         "-var=managed_image_name=$($ManagedImageName)" `
         "-var=managed_image_resource_group_name=$($ResourceGroupName)" `
         "-var=install_password=$($InstallPassword)" `
         "-var=allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
+        "-var=virtual_network_name=$($VirtualNetworkName)" `
+        "-var=virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
+        "-var=virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
         "-var=azure_tags=$($TagsJson)" `
         $TemplatePath
 
@@ -349,18 +374,20 @@ Function GenerateResourcesAndImage {
         }
         Write-Debug "Service principal app id: $ServicePrincipalAppId."
         Write-Debug "Tenant id: $TenantId."
-
-        & $PackerBinary build -on-error="$($OnError)" `
+            # -var "location=$($AzureLocation)" `
+        & $PackerBinary build -debug -on-error="$($OnError)" `
             -var "client_id=$($ServicePrincipalAppId)" `
             -var "client_secret=$($ServicePrincipalPassword)" `
             -var "subscription_id=$($SubscriptionId)" `
             -var "tenant_id=$($TenantId)" `
-            -var "location=$($AzureLocation)" `
             -var "managed_image_name=$($ManagedImageName)" `
             -var "managed_image_resource_group_name=$($ResourceGroupName)" `
             -var "install_password=$($InstallPassword)" `
             -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
             -var "azure_tags=$($TagsJson)" `
+            -var "virtual_network_name=$($VirtualNetworkName)" `
+            -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
+            -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
             $TemplatePath
 
         if ($LastExitCode -ne 0) {

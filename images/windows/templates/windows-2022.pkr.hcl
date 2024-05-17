@@ -16,10 +16,10 @@ variable "agent_tools_directory" {
   default = "C:\\hostedtoolcache\\windows"
 }
 
-# variable "allowed_inbound_ip_addresses" {
-#   type    = list(string)
-#   default = ["${env("ALLOWED_INBOUND_IP_ADRESSES")}"]
-# }
+variable "allowed_inbound_ip_addresses" {
+  type    = list(string)
+  default = ["${env("ALLOWED_INBOUND_IP_ADRESSES")}"]
+}
 
 variable "azure_tags" {
   type    = map(string)
@@ -85,7 +85,7 @@ variable "install_user" {
 
 variable "location" {
   type    = string
-  default = "${env("ARM_RESOURCE_LOCATION")}"
+  default = "East US"
 }
 
 variable "managed_image_name" {
@@ -108,10 +108,10 @@ variable "object_id" {
   default = "${env("ARM_OBJECT_ID")}"
 }
 
-# variable "private_virtual_network_with_public_ip" {
-#   type    = bool
-#   default = false
-# }
+variable "private_virtual_network_with_public_ip" {
+  type    = bool
+  default = false
+}
 
 variable "subscription_id" {
   type    = string
@@ -150,13 +150,13 @@ variable "virtual_network_subnet_name" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_B2s"
+  default = "Standard_F8s_v2"
 }
 
 source "azure-arm" "image" {
-  #allowed_inbound_ip_addresses          = "${var.allowed_inbound_ip_addresses}"
-  build_resource_group_name              = "ETN-POC-VTD-RUNNER"
-  # gallery_name                           = "pakcercem"
+  allowed_inbound_ip_addresses          = "${var.allowed_inbound_ip_addresses}"
+  build_resource_group_name              = "${var.build_resource_group_name}"
+  # gallery_name                           = "{var.shared_image_gallery_name}"
   client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
@@ -164,12 +164,12 @@ source "azure-arm" "image" {
   image_offer                            = "WindowsServer"
   image_publisher                        = "MicrosoftWindowsServer"
   image_sku                              = "2022-Datacenter"
-  #location                               = "East US"
+  location                               = "${var.location}"
   managed_image_name                     = "${local.managed_image_name}"
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
   object_id                              = "${var.object_id}"
-  os_disk_size_gb                        = "128"
+  os_disk_size_gb                        = "256"
   os_type                                = "Windows"
   #private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
@@ -181,24 +181,19 @@ source "azure-arm" "image" {
   vm_size                                = "${var.vm_size}"
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
-   winrm_timeout                         = "15m"
+  winrm_timeout                          = "30m"
   winrm_username                         = "packer"
+  #communicator                           = "winrm"
+  user_data_file                         = "${path.root}/../scripts/build/setup-winrm.ps1"
+  custom_script                          = "powershell -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -Command \"$userData = (Invoke-RestMethod -Headers @{Metadata=$true} -Method GET -Uri http://169.254.169.254/metadata/instance/compute/userData?api-version=2021-01-01$([char]38)format=text); $contents = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($userData)); set-content -path c:\\Windows\\Temp\\setup-winrm.ps1 -value $contents; . c:\\Windows\\Temp\\setup-winrm.ps1;\""
+  
   
   shared_image_gallery_destination {
         resource_group ="${var.managed_image_resource_group_name}"
         gallery_name = "${var.shared_image_gallery_name}"
         image_name = "Powershell-test"
         image_version = "1.1.2"
-   #build_resource_group_name = var.build_resource_group_name
-    #vm_size = var.build_vm_sku
-    #winrm_no_proxy = true
-
-    # networking parameters
-    # virtual_network_name = var.virtual_network_name
-    # virtual_network_subnet_name = var.virtual_network_subnet_name
-    # virtual_network_resource_group_name = var.infra_resource_group_name
-}
-
+  }
   dynamic "azure_tag" {
     for_each = var.azure_tags
     content {
