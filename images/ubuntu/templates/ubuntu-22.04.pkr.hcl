@@ -143,23 +143,23 @@ variable "vm_size" {
   default = "Standard_D4s_v4"
 }
 
-source "azure-arm" "build_image" {
-  allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
+source "azure-arm" "ubuntu2204_image_all_tools_2" {
+  # allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
-  client_cert_path                       = "${var.client_cert_path}"
+  # client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   image_offer                            = "0001-com-ubuntu-server-jammy"
   image_publisher                        = "canonical"
   image_sku                              = "22_04-lts"
-  location                               = "${var.location}"
+  # location                               = "${var.location}"
   managed_image_name                     = "${local.managed_image_name}"
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   os_disk_size_gb                        = "75"
   os_type                                = "Linux"
-  private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
+  private_virtual_network_with_public_ip = "false"
   subscription_id                        = "${var.subscription_id}"
-  temp_resource_group_name               = "${var.temp_resource_group_name}"
+  # temp_resource_group_name               = "${var.temp_resource_group_name}"
   tenant_id                              = "${var.tenant_id}"
   virtual_network_name                   = "${var.virtual_network_name}"
   virtual_network_resource_group_name    = "${var.virtual_network_resource_group_name}"
@@ -176,7 +176,7 @@ source "azure-arm" "build_image" {
 }
 
 build {
-  sources = ["source.azure-arm.build_image"]
+  sources = ["source.azure-arm.ubuntu2204_image_all_tools_2"]
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
@@ -326,7 +326,6 @@ build {
       "${path.root}/../scripts/build/install-sbt.sh",
       "${path.root}/../scripts/build/install-selenium.sh",
       "${path.root}/../scripts/build/install-terraform.sh",
-      "${path.root}/../scripts/build/install-packer.sh",
       "${path.root}/../scripts/build/install-vcpkg.sh",
       "${path.root}/../scripts/build/configure-dpkg.sh",
       "${path.root}/../scripts/build/install-yq.sh",
