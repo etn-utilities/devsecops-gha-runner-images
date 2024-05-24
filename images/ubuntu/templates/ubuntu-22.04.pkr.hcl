@@ -143,7 +143,7 @@ variable "vm_size" {
   default = "Standard_D4s_v4"
 }
 
-source "azure-arm" "ubuntu2204_image_all_tools_2" {
+source "azure-arm" "ubuntu2204_image_all_tools_with_cache" {
   # allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
   # client_cert_path                       = "${var.client_cert_path}"
@@ -176,7 +176,7 @@ source "azure-arm" "ubuntu2204_image_all_tools_2" {
 }
 
 build {
-  sources = ["source.azure-arm.ubuntu2204_image_all_tools_2"]
+  sources = ["source.azure-arm.ubuntu2204_image_all_tools_with_cache"]
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
@@ -326,6 +326,7 @@ build {
       "${path.root}/../scripts/build/install-sbt.sh",
       "${path.root}/../scripts/build/install-selenium.sh",
       "${path.root}/../scripts/build/install-terraform.sh",
+      "${path.root}/../scripts/build/install-packer.sh",
       "${path.root}/../scripts/build/install-vcpkg.sh",
       "${path.root}/../scripts/build/configure-dpkg.sh",
       "${path.root}/../scripts/build/install-yq.sh",
@@ -340,6 +341,11 @@ build {
     environment_vars = ["HELPER_SCRIPTS=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}", "DOCKERHUB_LOGIN=${var.dockerhub_login}", "DOCKERHUB_PASSWORD=${var.dockerhub_password}"]
     execute_command  = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     scripts          = ["${path.root}/../scripts/build/install-docker.sh"]
+  }
+
+  provisioner "shell" {
+    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    inline          = ["mkdir -p /cache/yocto-cache"]
   }
 
   provisioner "shell" {
