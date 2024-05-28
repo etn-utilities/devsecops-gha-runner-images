@@ -299,21 +299,21 @@ build {
     restart_timeout = "10m"
   }
 
-  # provisioner "powershell" {
-  #   pause_before     = "2m0s"
-  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
-  #   scripts          = [
-  #     "${path.root}/../scripts/build/Install-Wix.ps1",
-  #     "${path.root}/../scripts/build/Install-WDK.ps1",
-  #     "${path.root}/../scripts/build/Install-VSExtensions.ps1",
-  #     "${path.root}/../scripts/build/Install-AzureCli.ps1",
-  #     "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
-  #     "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
-  #     "${path.root}/../scripts/build/Install-JavaTools.ps1",
-  #     "${path.root}/../scripts/build/Install-Kotlin.ps1",
-  #     "${path.root}/../scripts/build/Install-OpenSSL.ps1"
-  #   ]
-  # }
+  provisioner "powershell" {
+    # pause_before     = "2m0s"
+    environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
+    scripts          = [
+      # "${path.root}/../scripts/build/Install-Wix.ps1",
+      # "${path.root}/../scripts/build/Install-WDK.ps1",
+      # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
+      # "${path.root}/../scripts/build/Install-AzureCli.ps1",
+      # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
+      "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
+      # "${path.root}/../scripts/build/Install-JavaTools.ps1",
+      # "${path.root}/../scripts/build/Install-Kotlin.ps1",
+      # "${path.root}/../scripts/build/Install-OpenSSL.ps1"
+    ]
+  }
 
   provisioner "powershell" {
     execution_policy = "remotesigned"
