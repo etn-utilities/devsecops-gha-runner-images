@@ -120,6 +120,12 @@ Function GenerateResourcesAndImage {
     #>
     param (
         [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkResourceGroupName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkSubnetName,
+        [Parameter(Mandatory = $True)]
         [string] $SubscriptionId,
         [Parameter(Mandatory = $True)]
         [string] $ResourceGroupName,
@@ -365,6 +371,9 @@ Function GenerateResourcesAndImage {
             -var "install_password=$($InstallPassword)" `
             -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
             -var "azure_tags=$($TagsJson)" `
+            -var "virtual_network_name=$($VirtualNetworkName)" `
+            -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
+            -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
             $TemplatePath
 
         if ($LastExitCode -ne 0) {
