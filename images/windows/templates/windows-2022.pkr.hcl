@@ -442,7 +442,7 @@ build {
     scripts          = [
       "${path.root}/../scripts/build/Install-NativeImages.ps1",
       "${path.root}/../scripts/build/Configure-System.ps1",
-      "${path.root}/../scripts/build/Configure-User.ps1"
+      # "${path.root}/../scripts/build/Configure-User.ps1"
     ]
     skip_clean       = true
   }
