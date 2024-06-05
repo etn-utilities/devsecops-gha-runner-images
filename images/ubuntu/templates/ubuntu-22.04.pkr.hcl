@@ -143,23 +143,23 @@ variable "vm_size" {
   default = "Standard_D4s_v4"
 }
 
-source "azure-arm" "build_image" {
-  allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
+source "azure-arm" "ubuntu2204_image_all_tools_with_cache" {
+  # allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
-  client_cert_path                       = "${var.client_cert_path}"
+  # client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   image_offer                            = "0001-com-ubuntu-server-jammy"
   image_publisher                        = "canonical"
   image_sku                              = "22_04-lts"
-  location                               = "${var.location}"
+  # location                               = "${var.location}"
   managed_image_name                     = "${local.managed_image_name}"
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   os_disk_size_gb                        = "75"
   os_type                                = "Linux"
-  private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
+  private_virtual_network_with_public_ip = "false"
   subscription_id                        = "${var.subscription_id}"
-  temp_resource_group_name               = "${var.temp_resource_group_name}"
+  # temp_resource_group_name               = "${var.temp_resource_group_name}"
   tenant_id                              = "${var.tenant_id}"
   virtual_network_name                   = "${var.virtual_network_name}"
   virtual_network_resource_group_name    = "${var.virtual_network_resource_group_name}"
@@ -176,7 +176,7 @@ source "azure-arm" "build_image" {
 }
 
 build {
-  sources = ["source.azure-arm.build_image"]
+  sources = ["source.azure-arm.ubuntu2204_image_all_tools_with_cache"]
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
@@ -281,6 +281,7 @@ build {
       "${path.root}/../scripts/build/install-azure-cli.sh",
       "${path.root}/../scripts/build/install-azure-devops-cli.sh",
       "${path.root}/../scripts/build/install-bicep.sh",
+      "${path.root}/../scripts/build/install-blobfuse.sh",
       "${path.root}/../scripts/build/install-aliyun-cli.sh",
       "${path.root}/../scripts/build/install-apache.sh",
       "${path.root}/../scripts/build/install-aws-tools.sh",
@@ -341,6 +342,11 @@ build {
     environment_vars = ["HELPER_SCRIPTS=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}", "DOCKERHUB_LOGIN=${var.dockerhub_login}", "DOCKERHUB_PASSWORD=${var.dockerhub_password}"]
     execute_command  = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     scripts          = ["${path.root}/../scripts/build/install-docker-compose.sh", "${path.root}/../scripts/build/install-docker.sh"]
+  }
+
+  provisioner "shell" {
+    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    inline          = ["mkdir -p /cache/yocto-cache"]
   }
 
   provisioner "shell" {
