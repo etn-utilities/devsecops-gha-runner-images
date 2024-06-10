@@ -125,7 +125,7 @@ New-Item -Path $m2RepoPath -ItemType Directory -Force | Out-Null
 
 [Environment]::SetEnvironmentVariable("M2", $m2Path, "Machine")
 [Environment]::SetEnvironmentVariable("M2_REPO", $m2RepoPath, "Machine")
-[Environment]::SetEnvironmentVariable("MAVEN_OPTS", "-Xms256m", "Machine")
+[Environment]::SetEnvironmentVariable("MAVEN_OPTS","-Xms512m -Xmx2048m ", "Machine")
 
 # Download cobertura jars
 $uri = 'https://repo1.maven.org/maven2/net/sourceforge/cobertura/cobertura/2.1.1/cobertura-2.1.1-bin.zip'

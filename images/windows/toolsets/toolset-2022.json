@@ -12,9 +12,10 @@
       "url": "https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json",
       "arch": "x64",
       "platform": "win32",
-      "versions": ["3.7.*", "3.8.*", "3.9.*", "3.10.*", "3.11.*", "3.12.*"],
+      "versions": ["3.10.*", "3.11.*", "3.12.*"],
       "default": "3.9.*"
     },
+
     {
       "name": "Python",
       "url": "https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json",
@@ -26,7 +27,7 @@
       "name": "PyPy",
       "arch": "x86",
       "platform": "win64",
-      "versions": ["2.7", "3.7", "3.8", "3.9", "3.10"]
+      "versions": ["3.8", "3.9", "3.10"]
     },
     {
       "name": "node",
@@ -40,7 +41,7 @@
       "url": "https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json",
       "arch": "x64",
       "platform": "win32",
-      "versions": ["1.20.*", "1.21.*", "1.22.*"],
+      "versions": ["1.21.*", "1.22.*"],
       "default": "1.21.*"
     }
   ],

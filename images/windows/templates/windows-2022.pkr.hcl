@@ -150,13 +150,13 @@ variable "virtual_network_subnet_name" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_F8s_v2"
+  default = "Standard_F48s_v2"
 }
 
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses          = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
-  # gallery_name                           = "{var.shared_image_gallery_name}"
+  #gallery_name                           = "{var.shared_image_gallery_name}"
   client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
@@ -288,13 +288,13 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      "${path.root}/../scripts/build/Install-Docker.ps1",
-      "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
-      "${path.root}/../scripts/build/Install-DockerCompose.ps1",
-      "${path.root}/../scripts/build/Install-PowershellCore.ps1",
-      "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
-      "${path.root}/../scripts/build/Install-Runner.ps1",
-      "${path.root}/../scripts/build/Install-Winzip.ps1"
+       "${path.root}/../scripts/build/Install-Docker.ps1",
+      # "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
+      # "${path.root}/../scripts/build/Install-DockerCompose.ps1",
+      # "${path.root}/../scripts/build/Install-PowershellCore.ps1",
+      # "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
+      # "${path.root}/../scripts/build/Install-Runner.ps1",
+      # "${path.root}/../scripts/build/Install-Winzip.ps1"
     ]
   }
 
@@ -307,9 +307,9 @@ build {
     elevated_user     = "${var.install_user}"
     environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts           = [
-      "${path.root}/../scripts/build/Install-VisualStudio.ps1",
-      "${path.root}/../scripts/build/Install-KubernetesTools.ps1"
-    ]
+       "${path.root}/../scripts/build/Install-VisualStudio.ps1",
+      # "${path.root}/../scripts/build/Install-KubernetesTools.ps1"
+     ]
     valid_exit_codes  = [0, 3010]
   }
 
@@ -322,15 +322,15 @@ build {
     pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      "${path.root}/../scripts/build/Install-Wix.ps1",
-      "${path.root}/../scripts/build/Install-WDK.ps1",
-      "${path.root}/../scripts/build/Install-VSExtensions.ps1",
-      "${path.root}/../scripts/build/Install-AzureCli.ps1",
-      "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
-      "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
-      "${path.root}/../scripts/build/Install-JavaTools.ps1",
-      "${path.root}/../scripts/build/Install-Kotlin.ps1",
-      "${path.root}/../scripts/build/Install-OpenSSL.ps1"
+       "${path.root}/../scripts/build/Install-Wix.ps1",
+      # "${path.root}/../scripts/build/Install-WDK.ps1",
+      # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
+      # "${path.root}/../scripts/build/Install-AzureCli.ps1",
+      # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
+      # "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
+       "${path.root}/../scripts/build/Install-JavaTools.ps1",
+       "${path.root}/../scripts/build/Install-Kotlin.ps1",
+      # "${path.root}/../scripts/build/Install-OpenSSL.ps1"
     ]
   }
 
@@ -351,13 +351,13 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      "${path.root}/../scripts/build/Install-ActionsCache.ps1",
-      "${path.root}/../scripts/build/Install-Ruby.ps1",
-      "${path.root}/../scripts/build/Install-PyPy.ps1",
-      "${path.root}/../scripts/build/Install-Toolset.ps1",
-      "${path.root}/../scripts/build/Configure-Toolset.ps1",
-      "${path.root}/../scripts/build/Install-NodeJS.ps1",
-      "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
+      # "${path.root}/../scripts/build/Install-ActionsCache.ps1",
+      # "${path.root}/../scripts/build/Install-Ruby.ps1",
+      # "${path.root}/../scripts/build/Install-PyPy.ps1",
+      # "${path.root}/../scripts/build/Install-Toolset.ps1",
+      # "${path.root}/../scripts/build/Configure-Toolset.ps1",
+      # "${path.root}/../scripts/build/Install-NodeJS.ps1",
+     # #"${path.root}/../scripts/build/Install-AndroidSDK.ps1",
       "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
       "${path.root}/../scripts/build/Install-Pipx.ps1",
       "${path.root}/../scripts/build/Install-Git.ps1",
