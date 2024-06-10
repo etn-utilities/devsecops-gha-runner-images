@@ -186,9 +186,6 @@ source "azure-arm" "image" {
   winrm_timeout                          = "30m"
   winrm_username                         = "packer"
   #communicator                           = "winrm"
-  user_data_file                         = "${path.root}/../scripts/build/setup-winrm.ps1"
-  custom_script                          = "powershell -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -Command \"$userData = (Invoke-RestMethod -Headers @{Metadata=$true} -Method GET -Uri http://169.254.169.254/metadata/instance/compute/userData?api-version=2021-01-01$([char]38)format=text); $contents = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($userData)); set-content -path c:\\Windows\\Temp\\setup-winrm.ps1 -value $contents; . c:\\Windows\\Temp\\setup-winrm.ps1;\""
-  
   
   shared_image_gallery_destination {
         resource_group ="${var.managed_image_resource_group_name}"

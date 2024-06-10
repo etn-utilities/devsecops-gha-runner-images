@@ -125,12 +125,6 @@ Function GenerateResourcesAndImage {
             GenerateResourcesAndImage -SubscriptionId {YourSubscriptionId} -ResourceGroupName "shsamytest1" -ImageGenerationRepositoryRoot "C:\runner-images" -ImageType Ubuntu2004 -AzureLocation "East US"
     #>
     param (
-         [Parameter(Mandatory = $True)]
-        [string] $VirtualNetworkName,
-        [Parameter(Mandatory = $True)]
-        [string] $VirtualNetworkResourceGroupName,
-        [Parameter(Mandatory = $True)]
-        [string] $VirtualNetworkSubnetName,
         [Parameter(Mandatory = $True)]
         [string] $VirtualNetworkName,
         [Parameter(Mandatory = $True)]
