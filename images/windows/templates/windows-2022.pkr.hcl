@@ -165,7 +165,7 @@ source "azure-arm" "image" {
   image_publisher                        = "MicrosoftWindowsServer"
   image_sku                              = "2022-Datacenter"
   location                               = "${var.location}"
-  managed_image_name                     = "${local.managed_image_name}"
+  managed_image_name                     = "${local.managed_image_name}-full"
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
   object_id                              = "${var.object_id}"
