@@ -151,14 +151,14 @@ variable "vm_size" {
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
-  gallery_name                           = "{var.shared_image_gallery_name}"
+  #gallery_name                           = "packer_gallery"               
   client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   communicator                           = "winrm"
-  image_offer                            = "Devsecops-Base-Image"
-  image_publisher                        = "Eaton EAS"
-  image_sku                              = "Windows-Bare-2022"
+  image_offer                            = "WindowsServer"
+  image_publisher                        = "MicrosoftWindowsServer"
+  image_sku                              = "2022-Datacenter"
   location                               = "${var.location}"
   managed_image_name                     = "${local.managed_image_name}"
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
@@ -179,6 +179,14 @@ source "azure-arm" "image" {
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
+  shared_image_gallery_destination {
+    subscription   = "${var.subscription_id}"
+    resource_group =  "${var.gallery_resource_group}"   # "ETN-ES-EAS-DEVSECOPS-PACKER"                 
+    gallery_name   =  "${var.gallery_name}"    #"packer_gallery"
+    image_name     =  "${local.managed_image_name}" #"Runner-Image-windowsbare2022"
+    image_version  = "1.0.0"
+  }
+
 
   dynamic "azure_tag" {
     for_each = var.azure_tags

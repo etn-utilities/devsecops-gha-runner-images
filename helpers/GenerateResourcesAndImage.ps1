@@ -3,11 +3,7 @@ $ErrorActionPreference = 'Stop'
 enum ImageType {
     Windows2019   = 1
     Windows2022   = 2
-    Ubuntu2004    = 3
-    Ubuntu2204    = 4
-    Ubuntu2404    = 5
-    UbuntuMinimal = 6
-    windowsbare2022 = 7
+    windowsbare2022 = 3
 
 }
 
