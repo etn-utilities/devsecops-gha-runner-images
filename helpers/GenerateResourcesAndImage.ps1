@@ -84,6 +84,8 @@ Function GenerateResourcesAndImage {
             The type of image to generate. Valid values are: Windows2019, Windows2022, Ubuntu2004, Ubuntu2204, UbuntuMinimal.
         .PARAMETER ManagedImageName
             The name of the managed image to create. The default is "Runner-Image-{{ImageType}}".
+        .PARAMETER GalleryName
+            The name of the gallery to use.
         .PARAMETER AzureLocation
             The Azure location where the Azure resources will be created. For example: "East US"
         .PARAMETER ImageGenerationRepositoryRoot
@@ -136,10 +138,14 @@ Function GenerateResourcesAndImage {
         [Parameter(Mandatory = $True)]
         [string] $ResourceGroupName,
         [Parameter(Mandatory = $True)]
+        [string] $GalleryName,
+        [Parameter(Mandatory = $True)]
         [ImageType] $ImageType,
         [Parameter(Mandatory = $False)]
         [string] $ManagedImageName = "Runner-Image-$($ImageType)",
-        [Parameter(Mandatory = $True)]
+        [Parameter(Mandatory = $False)]
+        [string] $ManagedImageVersion,
+        [Parameter(Mandatory = $False)]
         [string] $AzureLocation,
         [Parameter(Mandatory = $False)]
         [string] $ImageGenerationRepositoryRoot = $pwd,
@@ -171,6 +177,13 @@ Function GenerateResourcesAndImage {
     if ($Force -and $ReuseResourceGroup) {
         throw "Force and ReuseResourceGroup cannot be used together."
     }
+
+    if (-not $ManagedImageVersion) {
+        $dateCode = (Get-Date -Format "yyyy.M.dd")
+        $ManagedImageVersion = $dateCode
+    }
+
+    Write-Host "Using version $ManagedImageVersion"
 
     Show-LatestCommit -ErrorAction SilentlyContinue
 
@@ -241,12 +254,14 @@ Function GenerateResourcesAndImage {
         "-var=location=$($AzureLocation)" `
         "-var=managed_image_name=$($ManagedImageName)" `
         "-var=managed_image_resource_group_name=$($ResourceGroupName)" `
+        "-var=managed_image_gallery_name=$($GalleryName)" `
         "-var=install_password=$($InstallPassword)" `
         "-var=allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
         "-var=azure_tags=$($TagsJson)" `
         -var "virtual_network_name=$($VirtualNetworkName)" `
         -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
         -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
+        -var "image_version=$($ManagedImageVersion)" `
         $TemplatePath
 
     if ($LastExitCode -ne 0) {
@@ -377,12 +392,14 @@ Function GenerateResourcesAndImage {
             -var "location=$($AzureLocation)" `
             -var "managed_image_name=$($ManagedImageName)" `
             -var "managed_image_resource_group_name=$($ResourceGroupName)" `
+            -var "managed_image_gallery_name=$($GalleryName)" `
             -var "install_password=$($InstallPassword)" `
             -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
             -var "azure_tags=$($TagsJson)" `
             -var "virtual_network_name=$($VirtualNetworkName)" `
             -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
             -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
+            -var "image_version=$($ManagedImageVersion)" `
             $TemplatePath
 
         if ($LastExitCode -ne 0) {

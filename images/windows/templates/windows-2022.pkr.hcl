@@ -98,6 +98,11 @@ variable "managed_image_resource_group_name" {
   default = "${env("ARM_RESOURCE_GROUP")}"
 }
 
+variable "managed_image_gallery_name" {
+  type    = string
+  default = "${env("ARM_RESOURCE_GROUP")}"
+}
+
 variable "managed_image_storage_account_type" {
   type    = string
   default = "Premium_LRS"
@@ -159,9 +164,9 @@ source "azure-arm" "image" {
   image_publisher                        = "MicrosoftWindowsServer"
   image_sku                              = "2022-Datacenter"
   location                               = "${var.location}"
-  managed_image_name                     = "${local.managed_image_name}"
-  managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
-  managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
+  # managed_image_name                     = "${local.managed_image_name}"
+  # managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
+  # managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
   object_id                              = "${var.object_id}"
   os_disk_size_gb                        = "256"
   os_type                                = "Windows"
@@ -176,6 +181,13 @@ source "azure-arm" "image" {
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
+
+ shared_image_gallery_destination {
+       resource_group ="${var.managed_image_resource_group_name}"
+       gallery_name = "${var.managed_image_gallery_name}"
+       image_name = "${local.managed_image_name}"
+       image_version = "${var.image_version}"
+ }
 
   dynamic "azure_tag" {
     for_each = var.azure_tags
