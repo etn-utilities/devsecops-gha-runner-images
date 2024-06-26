@@ -49,7 +49,7 @@ variable "client_secret" {
 
 variable "helper_script_folder" {
   type    = string
-  default = "C:\\Program Files\\WindowsPowerShell\\Modules\\"
+  default = "C:\\Program Files\\WindowsPowerShell\\Modules"
 }
 
 variable "image_folder" {
