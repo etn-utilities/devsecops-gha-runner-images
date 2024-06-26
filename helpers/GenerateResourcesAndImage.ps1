@@ -4,10 +4,11 @@ enum ImageType {
     Windows2019             = 1
     Windows2022             = 2
     Windows2022Base         = 3
-    Ubuntu2004              = 4
-    Ubuntu2204              = 5
-    Ubuntu2404              = 6
-    UbuntuMinimal           = 7
+    Windows2022CoverityBase = 4
+    Ubuntu2004              = 5
+    Ubuntu2204              = 6
+    Ubuntu2404              = 7
+    UbuntuMinimal           = 8
 }
 
 Function Get-PackerTemplatePath {
@@ -28,6 +29,9 @@ Function Get-PackerTemplatePath {
         }
         ([ImageType]::Windows2022Base) {
             $relativeTemplatePath = Join-Path (Join-Path "windows" "templates") "windows-2022-base.pkr.hcl"
+        }
+        ([ImageType]::Windows2022CoverityBase) {
+            $relativeTemplatePath = Join-Path (Join-Path "windows" "templates") "windows-2022-coverity-base.pkr.hcl"
         }
         ([ImageType]::Ubuntu2004) {
             $relativeTemplatePath = Join-Path (Join-Path "ubuntu" "templates") "ubuntu-20.04.pkr.hcl"
