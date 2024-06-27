@@ -1,12 +1,13 @@
 $ErrorActionPreference = 'Stop'
 
 enum ImageType {
-    Windows2019   = 1
-    Windows2022   = 2
-    Ubuntu2004    = 3
-    Ubuntu2204    = 4
-    Ubuntu2404    = 5
-    UbuntuMinimal = 6
+    Windows2019             = 1
+    Windows2022             = 2
+    Windows2022Base         = 3
+    Ubuntu2004              = 4
+    Ubuntu2204              = 5
+    Ubuntu2404              = 6
+    UbuntuMinimal           = 7
 }
 
 Function Get-PackerTemplatePath {
@@ -24,6 +25,9 @@ Function Get-PackerTemplatePath {
         }
         ([ImageType]::Windows2022) {
             $relativeTemplatePath = Join-Path (Join-Path "windows" "templates") "windows-2022.pkr.hcl"
+        }
+        ([ImageType]::Windows2022Base) {
+            $relativeTemplatePath = Join-Path (Join-Path "windows" "templates") "windows-2022-base.pkr.hcl"
         }
         ([ImageType]::Ubuntu2004) {
             $relativeTemplatePath = Join-Path (Join-Path "ubuntu" "templates") "ubuntu-20.04.pkr.hcl"
@@ -84,6 +88,8 @@ Function GenerateResourcesAndImage {
             The type of image to generate. Valid values are: Windows2019, Windows2022, Ubuntu2004, Ubuntu2204, UbuntuMinimal.
         .PARAMETER ManagedImageName
             The name of the managed image to create. The default is "Runner-Image-{{ImageType}}".
+        .PARAMETER GalleryName
+            The name of the gallery to use.
         .PARAMETER AzureLocation
             The Azure location where the Azure resources will be created. For example: "East US"
         .PARAMETER ImageGenerationRepositoryRoot
@@ -105,6 +111,12 @@ Function GenerateResourcesAndImage {
         .PARAMETER ReuseResourceGroup
             Reuse the resource group if it exists without user confirmation.
             This parameter is deprecated and will be removed in a future release.
+        .PARAMETER VirtualNetworkName
+            The name of the virtual network to connect to
+        .PARAMETER VirtualNetworkResourceGroupName
+            The resource group the virtual network can be found in
+        .PARAMETER VirtualNetworkSubnetName
+            The name of the subnet in the virtual network to use
         .PARAMETER OnError
             Specify how packer handles an error during image creation.
             Options:
@@ -120,14 +132,24 @@ Function GenerateResourcesAndImage {
     #>
     param (
         [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkResourceGroupName,
+        [Parameter(Mandatory = $True)]
+        [string] $VirtualNetworkSubnetName,
+        [Parameter(Mandatory = $True)]
         [string] $SubscriptionId,
         [Parameter(Mandatory = $True)]
         [string] $ResourceGroupName,
         [Parameter(Mandatory = $True)]
+        [string] $GalleryName,
+        [Parameter(Mandatory = $True)]
         [ImageType] $ImageType,
         [Parameter(Mandatory = $False)]
         [string] $ManagedImageName = "Runner-Image-$($ImageType)",
-        [Parameter(Mandatory = $True)]
+        [Parameter(Mandatory = $False)]
+        [string] $ManagedImageVersion,
+        [Parameter(Mandatory = $False)]
         [string] $AzureLocation,
         [Parameter(Mandatory = $False)]
         [string] $ImageGenerationRepositoryRoot = $pwd,
@@ -159,6 +181,13 @@ Function GenerateResourcesAndImage {
     if ($Force -and $ReuseResourceGroup) {
         throw "Force and ReuseResourceGroup cannot be used together."
     }
+
+    if (-not $ManagedImageVersion) {
+        $dateCode = (Get-Date -Format "yyyy.M.dd")
+        $ManagedImageVersion = $dateCode
+    }
+
+    Write-Host "Using version $ManagedImageVersion"
 
     Show-LatestCommit -ErrorAction SilentlyContinue
 
@@ -229,9 +258,14 @@ Function GenerateResourcesAndImage {
         "-var=location=$($AzureLocation)" `
         "-var=managed_image_name=$($ManagedImageName)" `
         "-var=managed_image_resource_group_name=$($ResourceGroupName)" `
+        "-var=managed_image_gallery_name=$($GalleryName)" `
         "-var=install_password=$($InstallPassword)" `
         "-var=allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
         "-var=azure_tags=$($TagsJson)" `
+        -var "virtual_network_name=$($VirtualNetworkName)" `
+        -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
+        -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
+        -var "image_version=$($ManagedImageVersion)" `
         $TemplatePath
 
     if ($LastExitCode -ne 0) {
@@ -362,9 +396,14 @@ Function GenerateResourcesAndImage {
             -var "location=$($AzureLocation)" `
             -var "managed_image_name=$($ManagedImageName)" `
             -var "managed_image_resource_group_name=$($ResourceGroupName)" `
+            -var "managed_image_gallery_name=$($GalleryName)" `
             -var "install_password=$($InstallPassword)" `
             -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
             -var "azure_tags=$($TagsJson)" `
+            -var "virtual_network_name=$($VirtualNetworkName)" `
+            -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
+            -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
+            -var "image_version=$($ManagedImageVersion)" `
             $TemplatePath
 
         if ($LastExitCode -ne 0) {
