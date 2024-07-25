@@ -1,4 +1,4 @@
-name: Install Coverity Client
+name: Build Window Packer Image
 
 on:
   push:
