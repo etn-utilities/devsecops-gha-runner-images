@@ -1,0 +1,53 @@
+name: Install Coverity Client
+
+on:
+  push:
+    branches:
+      - cem/EDODSO-979
+
+jobs:
+  install-coverity:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # - name: Copy Coverity Client from Azure Blob Storage
+      #   env:
+      #     AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+      #     AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+      #   run: |
+      #     azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe" "C:\temp\coverity-client.exe" --recursive
+
+      - name: Create Temp Directory
+        run: |
+          if (-Not (Test-Path -Path "C:\temp")) {
+            New-Item -ItemType Directory -Path "C:\temp"  -Force
+          }
+      - name: Write license to file
+        run: |
+          Set-Content -Path 'C:\Temp\assets\license.dat' -Value $env:COVERITY_LICENSE  -Force
+        env:
+          COVERITY_LICENSE: ${{ secrets.COVERITY_LICENSE  }}
+
+      - name: Install Coverity Client
+        env:
+          # DEVOPS_ST_URL: ${{ vars.DEVOPS_ST_URL }}
+          DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
+          #COV_LICENSE=${{ secrets.COVERITY_LICENSE }}
+        run: |
+          # Start-Process -FilePath "C:\temp\coverity-client.exe" -ArgumentList "/S" -
+          # ./gen.ps1
+          ./images\windows\scripts\build\Install-CoverityClient.ps1
+
+      # - name: Checkout License Agreement Repository
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: catelleEMpei-Eaton/your-license-repo (etn-utilities/devsecops-cicdimage-ubuntu)
+      #     path: license-repo (etn-utilities/devsecops-cicdimage-ubuntu)
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Read and Display License Agreement
+      #   run: |
+      #     Get-Content "license-repo\path\to\license\agreement.txt" | Out-String

@@ -1,0 +1,12 @@
+{
+  "image_resource_group_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "example-resources"
+  },
+  "image_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "example-image"
+  }
+}
