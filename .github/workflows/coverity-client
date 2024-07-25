@@ -3,7 +3,7 @@ name: Build Window Packer Image
 on:
   push:
     branches:
-      - cem/EDODSO-979
+      - '*'
 
 jobs:
   install-coverity:
