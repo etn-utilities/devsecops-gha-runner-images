@@ -5,6 +5,7 @@ on:
     branches:
       - "*"
       - cem/EDODSO-979
+      - main
 
 jobs:
   install-coverity:
