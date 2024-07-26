@@ -5,7 +5,7 @@ on:
     branches:
       - "*"
       - cem/EDODSO-979
-      - main
+      - eaton/main
 
 jobs:
   install-coverity:
