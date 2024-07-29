@@ -5,7 +5,7 @@ New-Item -Path "C:\temp" -ItemType Directory -Force
 
 # Define the source URL and destination path
 
-#$sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-25T01:18:58Z&se=2024-07-25T09:18:58Z&spr=https&sv=2022-11-02&sr=b&sig=tc3aPZZir9IXAx2W0Y11rNWEsew0W28Y%2BsCwWyL%2FcyY%3De" 
+$sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-29T23:34:03Z&se=2024-07-30T07:34:03Z&spr=https&sv=2022-11-02&sr=b&sig=F2csZ41pwktaTqJ9FJQTAixt0bvTEAdvqkqE96ADUyM%3D" 
 # $DEVOPS_ST_SAS_TOKEN = $env:DEVOPS_ST_SAS_TOKEN
 # $sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe? + $DEVOPS_ST_SAS_TOKEN
 $destinationPath = "C:\temp/cov-analysis-win64-2024.3.1.exe"
@@ -14,11 +14,11 @@ if (-not (Get-Command azcopy -ErrorAction SilentlyContinue)) {
     exit 1
 }
 # Use AzCopy to copy the file from Azure Blob Storage to the local directory
-# azcopy copy $sourceUrl $destinationPath
-# if (-not (Test-Path $destinationPath)) {
-#     Write-Error "Failed to download the file."
-#     exit 1
-# }
+azcopy copy $sourceUrl $destinationPath
+if (-not (Test-Path $destinationPath)) {
+    Write-Error "Failed to download the file."
+    exit 1
+}
 
 # Install the Coverity client
 Start-Process -FilePath "C:\temp/cov-analysis-win64-2024.3.1.exe" -ArgumentList "-q", "--license.region=1", "--license.agreement=agree", "--license.cov.path=""C:\temp\license.dat"""

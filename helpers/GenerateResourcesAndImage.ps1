@@ -394,7 +394,7 @@ Function GenerateResourcesAndImage {
         Write-Debug "Service principal app id: $ServicePrincipalAppId."
         Write-Debug "Tenant id: $TenantId."
 
-        & $PackerBinary build -debug -on-error="$($OnError)" `
+        & $PackerBinary build -on-error="$($OnError)" `
             -var "client_id=$($ServicePrincipalAppId)" `
             -var "client_secret=$($ServicePrincipalPassword)" `
             -var "subscription_id=$($SubscriptionId)" `
