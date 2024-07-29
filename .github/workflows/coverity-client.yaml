@@ -51,8 +51,9 @@ jobs:
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+          DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
         run: |
-          azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe" "C:\temp\\cov-analysis-win64-2024.3.1.exe" --recursive
+          azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=$env:DEVOPS_ST_SAS_TOKEN" "C:\temp\\cov-analysis-win64-2024.3.1.exe" --recursive
 
       - name: Install Coverity Client
         env:
