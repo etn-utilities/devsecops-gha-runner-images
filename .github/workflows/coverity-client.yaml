@@ -53,7 +53,7 @@ jobs:
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
         run: |
-          azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-29T23:07:35Z&se=2024-07-30T07:07:35Z&spr=https&sv=2022-11-02&sr=b&sig=lI0J8oEXWyHu3RBrrbEfnwpRG4ooGBgFksl%2BHPWUG6o%3D" "C:\temp\\cov-analysis-win64-2024.3.1.exe" --recursive
+          azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-29T23:07:35Z&se=2024-07-30T07:07:35Z&spr=https&sv=2022-11-02&sr=b&sig=lI0J8oEXWyHu3RBrrbEfnwpRG4ooGBgFksl%2BHPWUG6o%3D" "C:\temp/cov-analysis-win64-2024.3.1.exe" --recursive
 
       - name: Install Coverity Client
         env:
@@ -61,7 +61,7 @@ jobs:
           DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
           #COV_LICENSE=${{ secrets.COVERITY_LICENSE }}
         run: |
-          # Start-Process -FilePath "C:\temp\\cov-analysis-win64-2024.3.1.exe" -ArgumentList "/S" -
+          # Start-Process -FilePath "C:\temp/cov-analysis-win64-2024.3.1.exe" -ArgumentList "/S" -
           # ./gen.ps1
           ./images\windows\scripts\build\Install-CoverityClient.ps1
 
