@@ -30,7 +30,8 @@ jobs:
       - name: Write license to file
         run: |
           pwd
-          Get-ChildItem -Force | Format-List -Property
+          Get-ChildItem -Force | Select-Object -Property Mode, LastWriteTime, Length, Name
+
       #     Set-Content -Path 'C:\Temp\assets\license.dat' -Value $env:COVERITY_LICENSE  -Force
       #   env:
       #     COVERITY_LICENSE: ${{ secrets.COVERITY_LICENSE  }}
