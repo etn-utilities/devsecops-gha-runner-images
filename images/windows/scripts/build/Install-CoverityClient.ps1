@@ -1,14 +1,14 @@
 # Download the Coverity client .exe from Azure Blob Storage
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 
-New-Item -Path "c:\temp" -ItemType Directory -Force
+New-Item -Path "C:\temp" -ItemType Directory -Force
 
 # Define the source URL and destination path
 
 #$sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-25T01:18:58Z&se=2024-07-25T09:18:58Z&spr=https&sv=2022-11-02&sr=b&sig=tc3aPZZir9IXAx2W0Y11rNWEsew0W28Y%2BsCwWyL%2FcyY%3De" 
 $DEVOPS_ST_SAS_TOKEN = $env:DEVOPS_ST_SAS_TOKEN
 $sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe? + $DEVOPS_ST_SAS_TOKEN
-$destinationPath = "c:\temp\\cov-analysis-win64-2024.3.1.exe"
+$destinationPath = "C:\temp\\cov-analysis-win64-2024.3.1.exe"
 if (-not (Get-Command azcopy -ErrorAction SilentlyContinue)) {
     Write-Error "AzCopy is not installed or not in the system's PATH."
     exit 1

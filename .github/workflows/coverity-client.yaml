@@ -15,13 +15,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # - name: Copy Coverity Client from Azure Blob Storage
-      #   env:
-      #     AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
-      #     AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-      #   run: |
-      #     azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe" "C:\temp\coverity-client.exe" --recursive
-
       - name: Download AzCopy
         run: |
           $url = "https://aka.ms/downloadazcopy-v10-windows"
@@ -54,13 +47,20 @@ jobs:
         env:
           COVERITY_LICENSE: ${{ secrets.COVERITY_LICENSE  }}
 
+      - name: Copy Coverity Client from Azure Blob Storage
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+        run: |
+          azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe" "C:\temp\\cov-analysis-win64-2024.3.1.exe" --recursive
+
       - name: Install Coverity Client
         env:
           # DEVOPS_ST_URL: ${{ vars.DEVOPS_ST_URL }}
           DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
           #COV_LICENSE=${{ secrets.COVERITY_LICENSE }}
         run: |
-          # Start-Process -FilePath "C:\temp\coverity-client.exe" -ArgumentList "/S" -
+          # Start-Process -FilePath "C:\temp\\cov-analysis-win64-2024.3.1.exe" -ArgumentList "/S" -
           # ./gen.ps1
           ./images\windows\scripts\build\Install-CoverityClient.ps1
 
