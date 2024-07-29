@@ -29,22 +29,21 @@ jobs:
           }
       - name: Write license to file
         run: |
-          pwd
+          Set-Content -Path 'C:\temp\license.dat' -Value $env:COVERITY_LICENSE  -Force
+          cd 'C:\temp'
           Get-ChildItem -Force | Select-Object -Property Mode, LastWriteTime, Length, Name
+        env:
+          COVERITY_LICENSE: ${{ secrets.COVERITY_LICENSE  }}
 
-      #     Set-Content -Path 'C:\Temp\assets\license.dat' -Value $env:COVERITY_LICENSE  -Force
-      #   env:
-      #     COVERITY_LICENSE: ${{ secrets.COVERITY_LICENSE  }}
-
-      # - name: Install Coverity Client
-      #   env:
-      #     # DEVOPS_ST_URL: ${{ vars.DEVOPS_ST_URL }}
-      #     DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
-      #     #COV_LICENSE=${{ secrets.COVERITY_LICENSE }}
-      #   run: |
-      #     # Start-Process -FilePath "C:\temp\coverity-client.exe" -ArgumentList "/S" -
-      #     # ./gen.ps1
-      #     ./images\windows\scripts\build\Install-CoverityClient.ps1
+      - name: Install Coverity Client
+        env:
+          # DEVOPS_ST_URL: ${{ vars.DEVOPS_ST_URL }}
+          DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
+          #COV_LICENSE=${{ secrets.COVERITY_LICENSE }}
+        run: |
+          # Start-Process -FilePath "C:\temp\coverity-client.exe" -ArgumentList "/S" -
+          # ./gen.ps1
+          ./images\windows\scripts\build\Install-CoverityClient.ps1
 
 #------------------------------------------------
 # - name: Checkout License Agreement Repository

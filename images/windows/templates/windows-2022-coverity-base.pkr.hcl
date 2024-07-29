@@ -249,7 +249,7 @@ build {
 
   provisioner "file" {
     destination = "C:/Temp"
-    source      = "C:/Temp/assets"
+    source      = "C:/temp"
   }
 
   # provisioner "powershell" {
