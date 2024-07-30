@@ -247,10 +247,10 @@ build {
   #   ]
   # }
 
-  provisioner "file" {
-    destination = "C:/Temp"
-    source      = "C:/temp"
-  }
+  # provisioner "file" {
+  #   destination =   "${var.image_folder}\\scripts\\docs-gen\\"                          "C:/Temp"
+  #   source      = "C:/Temp"
+  # }
 
   # provisioner "powershell" {
   #   inline = [
