@@ -410,8 +410,8 @@ Function GenerateResourcesAndImage {
             -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
             -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
             -var "image_version=$($ManagedImageVersion)" `
-            -debug `
             $TemplatePath
+            # -debug `
 
         if ($LastExitCode -ne 0) {
             throw "Failed to build image."
