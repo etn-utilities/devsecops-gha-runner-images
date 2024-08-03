@@ -160,18 +160,19 @@ source "azure-arm" "image" {
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   communicator                           = "winrm"
-  # image_offer                            = "WindowsServer"
-  # image_publisher                        = "MicrosoftWindowsServer"
-  # image_sku                              = "2022-Datacenter"
-  location                               = "${var.location}"
 
+   
    shared_image_gallery{
 	    subscription = "9013acaf-d6cc-4416-a9ed-7075ba759979"
 	    resource_group =   "ETN-ES-EAS-DEVSECOPS-PACKER"                  #"etn-es-eas-devsecops-infra"
 	    gallery_name =  "etn_packer_gallery"                        #"etn_es_eas_packer_gallery_infra"
 	    image_name =     "etn_es_runner_image_infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
-	    image_version = "1.0.2"                                    #"24.8.2"                                   
+	    image_version = "1.0.2"              #"24.8.1" 
 	}
+  # image_offer                            = "WindowsServer"
+  # image_publisher                        = "MicrosoftWindowsServer"
+  # image_sku                              = "2022-Datacenter"
+  location                               = "${var.location}"
   # managed_image_name                     = "${local.managed_image_name}"
   # managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   # managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
@@ -192,12 +193,14 @@ source "azure-arm" "image" {
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
 
- shared_image_gallery_destination {
-       resource_group =  "ETN-ES-EAS-DEVSECOPS-PACKER"               #"${var.managed_image_resource_group_name}"
-       gallery_name =   "etn_packer_gallery"                         #"${var.managed_image_gallery_name}"
-       image_name = "etn_es_runner_image_infra"                        #       "${local.managed_image_name}"
-       image_version =  "1.0.0"                                       #"${var.image_version}"
- }
+ 
+   shared_image_gallery_destination{
+	    subscription = "9013acaf-d6cc-4416-a9ed-7075ba759979"
+	    resource_group =   "ETN-ES-EAS-DEVSECOPS-PACKER"                  #"etn-es-eas-devsecops-infra"
+	    gallery_name =  "etn_packer_gallery"                        #"etn_es_eas_packer_gallery_infra"
+	    image_name =     "etn_es_runner_image_infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
+	    image_version = "1.0.0"                                    #"24.8.2"                                   
+	}
 
   dynamic "azure_tag" {
     for_each = var.azure_tags
@@ -249,7 +252,7 @@ build {
       "net user ${var.install_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
       "net localgroup Administrators ${var.install_user} /add",
       "winrm set winrm/config/service/auth @{Basic=\"true\"}",
-      "winrm get winrm/config/service/auth"
+  # #     "winrm get winrm/config/service/auth"
     ]
   }
 
@@ -311,7 +314,7 @@ build {
   #   environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
   #   scripts           = [
   #     "${path.root}/../scripts/build/Install-VisualStudio.ps1",
-  #     "${path.root}/../scripts/build/Install-KubernetesTools.ps1"
+  #     #"${path.root}/../scripts/build/Install-KubernetesTools.ps1"
   #   ]
   #   valid_exit_codes  = [0, 3010]
   # }
@@ -322,56 +325,58 @@ build {
   # }
 
   provisioner "powershell" {
-    # pause_before     = "2m0s"
+    pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      # "${path.root}/../scripts/build/Install-Wix.ps1",
-      # "${path.root}/../scripts/build/Install-WDK.ps1",
-      # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
+      "${path.root}/../scripts/build/Install-Wix.ps1",
+      "${path.root}/../scripts/build/Install-WDK.ps1",
+      "${path.root}/../scripts/build/Install-VSExtensions.ps1",
+      "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
       # "${path.root}/../scripts/build/Install-AzureCli.ps1",
       # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
-      "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
-      # "${path.root}/../scripts/build/Install-JavaTools.ps1",
-      # "${path.root}/../scripts/build/Install-Kotlin.ps1",
-      # "${path.root}/../scripts/build/Install-OpenSSL.ps1"
-    ]
+      
+    #   "${path.root}/../scripts/build/Install-JavaTools.ps1",
+    #   "${path.root}/../scripts/build/Install-Kotlin.ps1",
+    #   "${path.root}/../scripts/build/Install-OpenSSL.ps1"
+     ]
   }
 
-  # provisioner "powershell" {
-  #   execution_policy = "remotesigned"
-  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
-  #   scripts          = ["${path.root}/../scripts/build/Install-ServiceFabricSDK.ps1"]
-  # }
+  provisioner "powershell" {
+    execution_policy = "remotesigned"
+    environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
+    scripts          = ["${path.root}/../scripts/build/Install-ServiceFabricSDK.ps1"]
+  }
 
   provisioner "windows-restart" {
     restart_timeout = "10m"
   }
 
-  # provisioner "windows-shell" {
-  #   inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
-  # }
+  provisioner "windows-shell" {
+    inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
+  }
 
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
-    scripts          = [
-      # "${path.root}/../scripts/build/Install-ActionsCache.ps1",
+  # provisioner "powershell" {
+  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
+  #   scripts          = [
+      "${path.root}/../scripts/build/Install-ActionsCache.ps1",
+       "${path.root}/../scripts/build/Install-Azcopy.ps1",
       # "${path.root}/../scripts/build/Install-Ruby.ps1",
       # "${path.root}/../scripts/build/Install-PyPy.ps1",
-      "${path.root}/../scripts/build/Install-Toolset.ps1",
-      # "${path.root}/../scripts/build/Configure-Toolset.ps1",
-      "${path.root}/../scripts/build/Install-NodeJS.ps1",
-      # "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
-      # "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
-      # "${path.root}/../scripts/build/Install-Pipx.ps1",
-      "${path.root}/../scripts/build/Install-Git.ps1",
-      "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
-      # "${path.root}/../scripts/build/Install-PHP.ps1",
+      # "${path.root}/../scripts/build/Install-Toolset.ps1",
+      #  "${path.root}/../scripts/build/Install-Git.ps1",
+      # "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
+      #"${path.root}/../scripts/build/Configure-Toolset.ps1",
+      #"${path.root}/../scripts/build/Install-NodeJS.ps1",
+      #"${path.root}/../scripts/build/Install-AndroidSDK.ps1",
+      #"${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
+      #"${path.root}/../scripts/build/Install-Pipx.ps1",
+      #{path.root}/../scripts/build/Install-PHP.ps1",
       # "${path.root}/../scripts/build/Install-Rust.ps1",
       # "${path.root}/../scripts/build/Install-Sbt.ps1",
-      # "${path.root}/../scripts/build/Install-Chrome.ps1",
-      # "${path.root}/../scripts/build/Install-EdgeDriver.ps1",
-      # "${path.root}/../scripts/build/Install-Firefox.ps1",
-      # "${path.root}/../scripts/build/Install-Selenium.ps1",
+      "${path.root}/../scripts/build/Install-Chrome.ps1",
+      "${path.root}/../scripts/build/Install-EdgeDriver.ps1",
+      "${path.root}/../scripts/build/Install-Firefox.ps1",
+       "${path.root}/../scripts/build/Install-Selenium.ps1",
       # "${path.root}/../scripts/build/Install-IEWebDriver.ps1",
       # "${path.root}/../scripts/build/Install-Apache.ps1",
       # "${path.root}/../scripts/build/Install-Nginx.ps1",
@@ -381,9 +386,9 @@ build {
       # "${path.root}/../scripts/build/Install-AWSTools.ps1",
       # "${path.root}/../scripts/build/Install-DACFx.ps1",
       # "${path.root}/../scripts/build/Install-MysqlCli.ps1",
-      # "${path.root}/../scripts/build/Install-SQLPowerShellTools.ps1",
-      # "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
-      # "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
+      "${path.root}/../scripts/build/Install-SQLPowerShellTools.ps1",
+      "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
+      "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
       # "${path.root}/../scripts/build/Install-Mingw64.ps1",
       # "${path.root}/../scripts/build/Install-Haskell.ps1",
       # "${path.root}/../scripts/build/Install-Stack.ps1",
@@ -400,20 +405,20 @@ build {
       # "${path.root}/../scripts/build/Install-MongoDB.ps1",
       # "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
       # "${path.root}/../scripts/build/Configure-Diagnostics.ps1"
-    ]
-  }
+  #   ]
+  # }
 
   # provisioner "powershell" {
   #   elevated_password = "${var.install_password}"
   #   elevated_user     = "${var.install_user}"
   #   environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
   #   scripts           = [
-  #     "${path.root}/../scripts/build/Install-WindowsUpdates.ps1",
-  #     "${path.root}/../scripts/build/Configure-DynamicPort.ps1",
-  #     "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1",
-  #     "${path.root}/../scripts/build/Configure-Shell.ps1",
-  #     "${path.root}/../scripts/build/Configure-DeveloperMode.ps1",
-  #     "${path.root}/../scripts/build/Install-LLVM.ps1"
+  #      "${path.root}/../scripts/build/Install-WindowsUpdates.ps1",
+  # #     "${path.root}/../scripts/build/Configure-DynamicPort.ps1",
+  # #     "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1",
+  #      "${path.root}/../scripts/build/Configure-Shell.ps1",
+  # #     "${path.root}/../scripts/build/Configure-DeveloperMode.ps1",
+  # #     "${path.root}/../scripts/build/Install-LLVM.ps1"
   #   ]
   # }
 
@@ -423,18 +428,14 @@ build {
   #   restart_timeout       = "30m"
   # }
 
-  # provisioner "powershell" {
-  #   pause_before     = "2m0s"
-  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
-  #   scripts          = [
-  #     "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
-  #     "${path.root}/../scripts/tests/RunAll-Tests.ps1"
-  #   ]
-  # }
-
-  # provisioner "powershell" {
-  #   inline = ["if (-not (Test-Path ${var.image_folder}\\tests\\testResults.xml)) { throw '${var.image_folder}\\tests\\testResults.xml not found' }"]
-  # }
+  provisioner "powershell" {
+    pause_before     = "30m0s"
+    environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
+    scripts          = [
+      "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
+  #     #"${path.root}/../scripts/tests/RunAll-Tests.ps1"
+    ]
+  }
 
   # provisioner "powershell" {
   #   environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_FOLDER=${var.image_folder}"]
@@ -457,15 +458,15 @@ build {
   #   source      = "C:\\software-report.json"
   # }
 
-  provisioner "powershell" {
-    environment_vars = ["INSTALL_USER=${var.install_user}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-NativeImages.ps1",
-      "${path.root}/../scripts/build/Configure-System.ps1",
-      # "${path.root}/../scripts/build/Configure-User.ps1"
-    ]
-    skip_clean       = true
-  }
+   provisioner "powershell" {
+     environment_vars = ["INSTALL_USER=${var.install_user}"]
+     scripts          = [
+  #      "${path.root}/../scripts/build/Install-NativeImages.ps1",
+       "${path.root}/../scripts/build/Configure-System.ps1",
+  # # #     "${path.root}/../scripts/build/Configure-User.ps1"
+     ]
+     skip_clean       = true
+   }
 
   provisioner "windows-restart" {
     restart_timeout = "10m"

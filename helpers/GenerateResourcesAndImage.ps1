@@ -8,6 +8,7 @@ enum ImageType {
     Ubuntu2204              = 5
     Ubuntu2404              = 6
     UbuntuMinimal           = 7
+    Windows2022vtdlegacy    = 8
 }
 
 Function Get-PackerTemplatePath {
@@ -25,6 +26,9 @@ Function Get-PackerTemplatePath {
         }
         ([ImageType]::Windows2022) {
             $relativeTemplatePath = Join-Path (Join-Path "windows" "templates") "windows-2022.pkr.hcl"
+        }
+         ([ImageType]::Windows2022vtdlegacy) {
+            $relativeTemplatePath = Join-Path (Join-Path "windows" "templates") "windows-2022-vtd-legacy.pkr.hcl"
         }
         ([ImageType]::Windows2022Base) {
             $relativeTemplatePath = Join-Path (Join-Path "windows" "templates") "windows-2022-base.pkr.hcl"
