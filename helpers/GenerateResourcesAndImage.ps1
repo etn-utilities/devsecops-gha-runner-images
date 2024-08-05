@@ -304,7 +304,7 @@ Function GenerateResourcesAndImage {
             if ($Force) {
                 # Delete and recreate the resource group
                 Write-Host "Deleting resource group '$ResourceGroupName'..."
-                az group delete --name $ResourceGroupName --yes --output none
+                #az group delete --name $ResourceGroupName --yes --output none
                 if ($LastExitCode -ne 0) {
                     throw "Failed to delete resource group '$ResourceGroupName'."
                 }
@@ -323,9 +323,9 @@ Function GenerateResourcesAndImage {
                     $message = "Do you want to delete the resource group and all resources in it?"
 
                     $options = @(
-                        [System.Management.Automation.Host.ChoiceDescription]::new("&Yes", "Delete the resource group and all resources in it."),
+                        #[System.Management.Automation.Host.ChoiceDescription]::new("&Yes", "Delete the resource group and all resources in it."),
                         [System.Management.Automation.Host.ChoiceDescription]::new("&No", "Keep the resource group and continue."),
-                        [System.Management.Automation.Host.ChoiceDescription]::new("&Abort", "Abort execution.")
+                       # [System.Management.Automation.Host.ChoiceDescription]::new("&Abort", "Abort execution.")
                     )
                     $result = $Host.UI.PromptForChoice($title, $message, $options, 0)
                 }
@@ -334,7 +334,7 @@ Function GenerateResourcesAndImage {
                     0 {
                         # Delete and recreate the resource group
                         Write-Host "Deleting resource group '$ResourceGroupName'..."
-                        az group delete --name $ResourceGroupName --yes
+                        #az group delete --name $ResourceGroupName --yes
                         if ($LastExitCode -ne 0) {
                             throw "Failed to delete resource group '$ResourceGroupName'."
                         }
@@ -410,6 +410,7 @@ Function GenerateResourcesAndImage {
             -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
             -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
             -var "image_version=$($ManagedImageVersion)" `
+            
             $TemplatePath
             # -debug `
 

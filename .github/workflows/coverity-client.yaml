@@ -35,7 +35,7 @@ jobs:
       - name: Create Temp Directory
         run: |
           if (-Not (Test-Path -Path "C:\temp")) {
-            New-Item -ItemType Directory -Path "C:\temp"  -Force
+            New-Item -ItemType Directory -Path "C:\temp" -Force
           }
       - name: Write license to file
         run: |

@@ -185,12 +185,12 @@ source "azure-arm" "image" {
   client_secret                          = "${var.client_secret}"
   communicator                           = "winrm"
 
-   shared_image_gallery {
+   shared_image_gallery{
 	    subscription = "9013acaf-d6cc-4416-a9ed-7075ba759979"
-	    resource_group = "ETN-ES-EAS-DEVSECOPS-PACKER"
-	    gallery_name = "packer_gallery"
-	    image_name = "coverity-bare"
-	    image_version = "2024.7.23"
+	    resource_group =   "ETN-ES-EAS-DEVSECOPS-PACKER"                  #"etn-es-eas-devsecops-infra"
+	    gallery_name =  "etn_packer_gallery"                        #"etn_es_eas_packer_gallery_infra"
+	    image_name =     "etn_es_runner_image_infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
+	    image_version = "1.0.0"
 	}
 
   #custom_managed_image_id                   = "/subscriptions/9013acaf-d6cc-4416-a9ed-7075ba759979/resourceGroups/ETN-ES-EAS-DEVSECOPS-PACKER/providers/Microsoft.Compute/galleries/packer_gallery/images/WindowsTest1/versions/2024.6.25"
@@ -216,10 +216,10 @@ source "azure-arm" "image" {
   winrm_username                         = "packer"
 
  shared_image_gallery_destination {
-       resource_group                    ="${var.managed_image_resource_group_name}"            #"etn-es-eas-devsecops-infra"
-       gallery_name                      ="${var.managed_image_gallery_name}"                  #"etn_es_eas_packer_gallery_infra"
-       image_name                        ="coverity-bare"                                      #"etn-es-eas-runner-Image-windowsbare2022-infra" 
-       image_version                     = "2024.7.24"                                         #"2024.7.17" 
+       resource_group                    =  "etn-es-eas-devsecops-infra"                          #"${var.managed_image_resource_group_name}"            
+       gallery_name                      =  "etn_es_eas_packer_gallery_infra"                     #"${var.managed_image_gallery_name}"                  
+       image_name                        =  "etn-es-eas-runner-Image-windowsbare2022-infra"       # "coverity-bare"                                      
+       image_version                     =  "2024.8.5"                                            #"2024.7.24"                                         
  }
 
   dynamic "azure_tag" {
@@ -248,8 +248,8 @@ build {
   # }
 
   # provisioner "file" {
-  #   destination =   "${var.image_folder}\\scripts\\docs-gen\\"                          "C:/Temp"
-  #   source      = "C:/Temp"
+  #   destination = "${var.image_folder}\\scripts\\docs-gen\\"
+  #   source      = "${path.root}/../../../helpers/software-report-base"
   # }
 
   # provisioner "powershell" {
@@ -280,11 +280,11 @@ build {
   #   inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
   # }
 
-  # provisioner "powershell" {
-  #   elevated_password = "${var.install_password}"
-  #   elevated_user     = "${var.install_user}"
-  #   inline            = ["bcdedit.exe /set TESTSIGNING ON"]
-  # }
+  provisioner "powershell" {
+    elevated_password = "${var.install_password}"
+    elevated_user     = "${var.install_user}"
+    inline            = ["bcdedit.exe /set TESTSIGNING ON"]
+  }
 
   # provisioner "powershell" {
   #   environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}"]
@@ -315,13 +315,13 @@ build {
   # provisioner "powershell" {
   #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
   #   scripts          = [
-  #     # "${path.root}/../scripts/build/Install-Docker.ps1",
-      # "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
-      #"${path.root}/../scripts/build/Install-Selenium.ps1",
-      # "${path.root}/../scripts/build/Install-DockerCompose.ps1",
-      # "${path.root}/../scripts/build/Install-PowershellCore.ps1",
-      # "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
-      # "${path.root}/../scripts/build/Install-Runner.ps1"
+  #      # "${path.root}/../scripts/build/Install-Docker.ps1",
+  # #     "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
+  #      "${path.root}/../scripts/build/Install-Selenium.ps1",
+  #     "${path.root}/../scripts/build/Install-DockerCompose.ps1",
+  #     "${path.root}/../scripts/build/Install-PowershellCore.ps1",
+  #     "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
+       #"${path.root}/../scripts/build/Install-Runner.ps1"
   #   ]
   # }
 
@@ -335,7 +335,7 @@ build {
   #   environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
   #   scripts           = [
   #     "${path.root}/../scripts/build/Install-VisualStudio.ps1",
-  #     "${path.root}/../scripts/build/Install-KubernetesTools.ps1"
+  #     #"${path.root}/../scripts/build/Install-KubernetesTools.ps1"
   #   ]
   #   valid_exit_codes  = [0, 3010]
   # }
@@ -349,7 +349,7 @@ build {
     # pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-       #"${path.root}/../scripts/build/Install-Wix.ps1,"
+       #"${path.root}/../scripts/build/Install-Wix.ps1",
       # "${path.root}/../scripts/build/Install-WDK.ps1",
       # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
       # "${path.root}/../scripts/build/Install-AzureCli.ps1",
@@ -380,7 +380,7 @@ build {
   # provisioner "powershell" {
   #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
   #   scripts          = [
-  #     # "${path.root}/../scripts/build/Install-ActionsCache.ps1",
+        #"${path.root}/../scripts/build/Install-ActionsCache.ps1",
   #     # "${path.root}/../scripts/build/Install-Ruby.ps1",
   #      "${path.root}/../scripts/build/Install-PyPy.ps1",
       #"${path.root}/../scripts/build/Install-Toolset.ps1",
@@ -389,8 +389,8 @@ build {
       # "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
       # "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
       # "${path.root}/../scripts/build/Install-Pipx.ps1",
-      #"${path.root}/../scripts/build/Install-Git.ps1",
-      #"${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
+       #"${path.root}/../scripts/build/Install-Git.ps1",
+       #"${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
       # "${path.root}/../scripts/build/Install-PHP.ps1",
       # "${path.root}/../scripts/build/Install-Rust.ps1",
       # "${path.root}/../scripts/build/Install-Sbt.ps1",
@@ -399,7 +399,7 @@ build {
       # "${path.root}/../scripts/build/Install-Firefox.ps1",
       # "${path.root}/../scripts/build/Install-Selenium.ps1",
       # "${path.root}/../scripts/build/Install-IEWebDriver.ps1",
-      # "${path.root}/../scripts/build/Install-Apache.ps1",
+      # #"${path.root}/../scripts/build/Install-Apache.ps1",
       # "${path.root}/../scripts/build/Install-Nginx.ps1",
       # "${path.root}/../scripts/build/Install-Msys2.ps1",
       # "${path.root}/../scripts/build/Install-WinAppDriver.ps1",
@@ -408,8 +408,8 @@ build {
       # "${path.root}/../scripts/build/Install-DACFx.ps1",
       # "${path.root}/../scripts/build/Install-MysqlCli.ps1",
       # "${path.root}/../scripts/build/Install-SQLPowerShellTools.ps1",
-      # "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
-      # "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
+      #  "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
+      #  "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
       # "${path.root}/../scripts/build/Install-Mingw64.ps1",
       # "${path.root}/../scripts/build/Install-Haskell.ps1",
       # "${path.root}/../scripts/build/Install-Stack.ps1",
