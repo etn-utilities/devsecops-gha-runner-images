@@ -45,13 +45,14 @@ jobs:
         env:
           COVERITY_LICENSE: ${{ secrets.COVERITY_LICENSE  }}
 
-      # - name: Copy Coverity Client from Azure Blob Storage
-      #   env:
-      #     AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
-      #     AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-      #     DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
-      #   run: |
-      #     azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-29T23:07:35Z&se=2024-07-30T07:07:35Z&spr=https&sv=2022-11-02&sr=b&sig=lI0J8oEXWyHu3RBrrbEfnwpRG4ooGBgFksl%2BHPWUG6o%3D" "C:\temp/cov-analysis-win64-2024.3.1.exe" --recursive
+      - name: Copy Coverity Client from Azure Blob Storage
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+          DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
+        run: |
+          azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-29T23:07:35Z&se=2024-07-30T07:07:35Z&spr=https&sv=2022-11-02&sr=b&sig=lI0J8oEXWyHu3RBrrbEfnwpRG4ooGBgFksl%2BHPWUG6o%3D" "C:\temp/cov-analysis-win64-2024.3.1.exe" --recursive
+          Start-Process -FilePath "C:\temp/cov-analysis-win64-2024.3.1.exe" -ArgumentList "-q", "--license.region=1", "--license.agreement=agree", "--license.cov.path=""C:\temp\license.dat"""
 
       - name: Install Coverity Client
         env:
@@ -76,9 +77,6 @@ jobs:
           $Env:PACKER_LOG = 1
           Write-Output $env:AZURE_SAS_TOKEN
           Write-Output $env:VIRTUALNETWORK_RESOURCE_GROUP
-
-
-          # GenerateResourcesAndImage -SubscriptionId 9013acaf-d6cc-4416-a9ed-7075ba759979 -ResourceGroupName ETN-ES-EAS-DEVSECOPS-PACKER -ImageType  Windows2022Base  -AzureLocation "East US" -AzureClientId 52563be7-6764-4964-b3dc-beb18e7623d2 -AzureClientSecret "~H48Q~tiI1SZXH~GNq8SdqSI_9yXS124.GjHNb8Q"  -AzureTenantId d6525c95-b906-431a-b926-e9b51ba43cc4 -VirtualNetworkName vnet-yukon-sbx-eus -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary" -VirtualNetworkSubnetName AppSubnet -GalleryName "etn_packer_gallery"  -ReuseResourceGroup
 
 #------------------------------------------------
 # - name: Checkout License Agreement Repository
