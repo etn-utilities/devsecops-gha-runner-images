@@ -318,35 +318,35 @@ Function GenerateResourcesAndImage {
                     throw "Non-interactive mode, resource group '$ResourceGroupName' already exists, either specify -Force to delete it, or -ReuseResourceGroup to reuse."
                 }
                 else {
-                    # Resource group already exists, ask the user what to do
-                    $title = "Resource group '$ResourceGroupName' already exists"
-                    $message = "Do you want to delete the resource group and all resources in it?"
+                #     # Resource group already exists, ask the user what to do
+                #     $title = "Resource group '$ResourceGroupName' already exists"
+                #     $message = "Do you want to delete the resource group and all resources in it?"
 
-                    $options = @(
-                        #[System.Management.Automation.Host.ChoiceDescription]::new("&Yes", "Delete the resource group and all resources in it."),
-                        [System.Management.Automation.Host.ChoiceDescription]::new("&No", "Keep the resource group and continue."),
-                       # [System.Management.Automation.Host.ChoiceDescription]::new("&Abort", "Abort execution.")
-                    )
-                    $result = $Host.UI.PromptForChoice($title, $message, $options, 0)
-                }
+                #     $options = @(
+                #         #[System.Management.Automation.Host.ChoiceDescription]::new("&Yes", "Delete the resource group and all resources in it."),
+                #         [System.Management.Automation.Host.ChoiceDescription]::new("&No", "Keep the resource group and continue."),
+                #        # [System.Management.Automation.Host.ChoiceDescription]::new("&Abort", "Abort execution.")
+                #     )
+                #     $result = $Host.UI.PromptForChoice($title, $message, $options, 0)
+                # }
 
-                switch ($result) {
-                    0 {
-                        # Delete and recreate the resource group
-                        Write-Host "Deleting resource group '$ResourceGroupName'..."
-                        #az group delete --name $ResourceGroupName --yes
-                        if ($LastExitCode -ne 0) {
-                            throw "Failed to delete resource group '$ResourceGroupName'."
-                        }
-                        Write-Host "Resource group '$ResourceGroupName' was deleted."
-                        $ResourceGroupExists = $false
-                    }
-                    1 {
-                        # Keep the resource group and continue
-                    }
-                    2 {
-                        # Stop the current action
-                        Write-Error "User stopped the action."
+                # switch ($result) {
+                #     0 {
+                #         # Delete and recreate the resource group
+                #         Write-Host "Deleting resource group '$ResourceGroupName'..."
+                #         #az group delete --name $ResourceGroupName --yes
+                #         if ($LastExitCode -ne 0) {
+                #             throw "Failed to delete resource group '$ResourceGroupName'."
+                #         }
+                #         Write-Host "Resource group '$ResourceGroupName' was deleted."
+                #         $ResourceGroupExists = $false
+                #     }
+                #     1 {
+                #         # Keep the resource group and continue
+                #     }
+                #     2 {
+                #         # Stop the current action
+                #         Write-Error "User stopped the action."
                         exit 1
                     }
                 }

@@ -58,10 +58,27 @@ jobs:
           # DEVOPS_ST_URL: ${{ vars.DEVOPS_ST_URL }}
           DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
           #COV_LICENSE=${{ secrets.COVERITY_LICENSE }}
+          AZURE_SAS_TOKEN: ${{ secrets.AZURE_SAS_TOKEN }}
+
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          VIRTUALNETWORK_RESOURCE_GROUP: ${{ secrets.VIRTUALNETWORK_RESOURCE_GROUP }}
+          VIRTUAL_NETWORK_NAME: ${{ secrets.VIRTUAL_NETWORK_NAME }}
+          VIRTUAL_SUBNET_NAME: ${{ secrets.VIRTUAL_SUBNET_NAME }}
+          AZURE_GALLERY_NAME: ${{ secrets.AZURE_GALLERY_NAME }}
+
         run: |
-          # Start-Process -FilePath "C:\temp/cov-analysis-win64-2024.3.1.exe" -ArgumentList "/S" -
-          ./gen.ps1
-          # ./images\windows\scripts\build\Install-CoverityClient.ps1
+          Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force 
+          $Env:PACKER_LOG = 1
+          Write-Output $env:AZURE_SAS_TOKEN
+          Write-Output $env:VIRTUALNETWORK_RESOURCE_GROUP
+
+
+          # GenerateResourcesAndImage -SubscriptionId 9013acaf-d6cc-4416-a9ed-7075ba759979 -ResourceGroupName ETN-ES-EAS-DEVSECOPS-PACKER -ImageType  Windows2022Base  -AzureLocation "East US" -AzureClientId 52563be7-6764-4964-b3dc-beb18e7623d2 -AzureClientSecret "~H48Q~tiI1SZXH~GNq8SdqSI_9yXS124.GjHNb8Q"  -AzureTenantId d6525c95-b906-431a-b926-e9b51ba43cc4 -VirtualNetworkName vnet-yukon-sbx-eus -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary" -VirtualNetworkSubnetName AppSubnet -GalleryName "etn_packer_gallery"  -ReuseResourceGroup
 
 #------------------------------------------------
 # - name: Checkout License Agreement Repository
