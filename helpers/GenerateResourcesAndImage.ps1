@@ -346,9 +346,9 @@ Function GenerateResourcesAndImage {
                 #     }
                 #     2 {
                 #         # Stop the current action
-                #         Write-Error "User stopped the action."
-                        exit 1
-                    }
+                        Write-Error "User stopped the action."
+                        # exit 1
+                    # }
                 }
             }
         }
@@ -412,7 +412,7 @@ Function GenerateResourcesAndImage {
             -var "image_version=$($ManagedImageVersion)" `
             
             $TemplatePath
-            # -debug `
+
 
         if ($LastExitCode -ne 0) {
             throw "Failed to build image."
