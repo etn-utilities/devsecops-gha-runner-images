@@ -51,8 +51,9 @@ jobs:
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
         run: |
-          azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-29T23:07:35Z&se=2024-07-30T07:07:35Z&spr=https&sv=2022-11-02&sr=b&sig=lI0J8oEXWyHu3RBrrbEfnwpRG4ooGBgFksl%2BHPWUG6o%3D" "C:\temp/cov-analysis-win64-2024.3.1.exe" --recursive
-          Start-Process -FilePath "C:\temp/cov-analysis-win64-2024.3.1.exe" -ArgumentList "-q", "--license.region=1", "--license.agreement=agree", "--license.cov.path=""C:\temp\license.dat"""
+          dir
+          # azcopy copy "https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-07-29T23:07:35Z&se=2024-07-30T07:07:35Z&spr=https&sv=2022-11-02&sr=b&sig=lI0J8oEXWyHu3RBrrbEfnwpRG4ooGBgFksl%2BHPWUG6o%3D" "C:\temp/cov-analysis-win64-2024.3.1.exe" --recursive
+          # Start-Process -FilePath "C:\temp/cov-analysis-win64-2024.3.1.exe" -ArgumentList "-q", "--license.region=1", "--license.agreement=agree", "--license.cov.path=""C:\temp\license.dat"""
 
       - name: Install Coverity Client
         env:
@@ -73,10 +74,9 @@ jobs:
           AZURE_GALLERY_NAME: ${{ vars.AZURE_GALLERY_NAME }}
 
         run: |
+          az login --service-principal --username $env:AZURE_CLIENT_ID --password $env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID
           Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force 
-          $Env:PACKER_LOG = 1
-          Write-Output $env:AZURE_SAS_TOKEN
-          Write-Output $env:VIRTUALNETWORK_RESOURCE_GROUP
+          #$Env:PACKER_LOG = 1
 
 #------------------------------------------------
 # - name: Checkout License Agreement Repository
