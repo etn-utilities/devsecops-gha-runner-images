@@ -74,7 +74,7 @@ jobs:
           AZURE_GALLERY_NAME: ${{ vars.AZURE_GALLERY_NAME }}
 
         run: |
-          az login --service-principal --username $env:AZURE_CLIENT_ID --password $env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID
+          az login --service-principal -u $env:AZURE_CLIENT_ID -p=$env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID
           Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force 
           #$Env:PACKER_LOG = 1
 
