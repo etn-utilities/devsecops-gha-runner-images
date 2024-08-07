@@ -57,21 +57,20 @@ jobs:
 
       - name: Install Coverity Client
         env:
-          # DEVOPS_ST_URL: ${{ vars.DEVOPS_ST_URL }}
           DEVOPS_ST_SAS_TOKEN: ${{ secrets.DEVOPS_ST_SAS_TOKEN }}
-          #COV_LICENSE=${{ secrets.COVERITY_LICENSE }}
+          COV_LICENSE: ${{ secrets.COVERITY_LICENSE }}
           AZURE_SAS_TOKEN: ${{ secrets.AZURE_SAS_TOKEN }}
 
-          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-          AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+          AZURE_SUBSCRIPTION_ID: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RESOURCE_GROUP: ${{ env.AZURE_RESOURCE_GROUP }}
           AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
-          VIRTUALNETWORK_RESOURCE_GROUP: ${{ vars.VIRTUALNETWORK_RESOURCE_GROUP }}
-          VIRTUAL_NETWORK_NAME: ${{ vars.VIRTUAL_NETWORK_NAME }}
-          VIRTUAL_SUBNET_NAME: ${{ vars.VIRTUAL_SUBNET_NAME }}
-          AZURE_GALLERY_NAME: ${{ vars.AZURE_GALLERY_NAME }}
+          AZURE_TENANT_ID: ${{ env.AZURE_TENANT_ID }}
+          VIRTUALNETWORK_RESOURCE_GROUP: ${{ env.VIRTUALNETWORK_RESOURCE_GROUP }}
+          VIRTUAL_NETWORK_NAME: ${{ env.VIRTUAL_NETWORK_NAME }}
+          VIRTUAL_SUBNET_NAME: ${{ env.VIRTUAL_SUBNET_NAME }}
+          AZURE_GALLERY_NAME: ${{ env.AZURE_GALLERY_NAME }}
 
         run: |
           az login --service-principal --username $env:AZURE_CLIENT_ID -p=$env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID
