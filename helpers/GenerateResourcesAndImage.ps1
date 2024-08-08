@@ -410,7 +410,6 @@ Function GenerateResourcesAndImage {
             -var "virtual_network_resource_group_name=$($VirtualNetworkResourceGroupName)" `
             -var "virtual_network_subnet_name=$($VirtualNetworkSubnetName)" `
             -var "image_version=$($ManagedImageVersion)" `
-            
             $TemplatePath
 
 
