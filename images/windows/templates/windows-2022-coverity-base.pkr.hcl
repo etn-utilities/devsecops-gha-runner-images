@@ -216,10 +216,10 @@ source "azure-arm" "image" {
   winrm_username                         = "packer"
 
  shared_image_gallery_destination {
-       resource_group                    =  "etn-es-eas-devsecops-infra"                          #"${var.managed_image_resource_group_name}"            
-       gallery_name                      =  "etn_es_eas_packer_gallery_infra"                     #"${var.managed_image_gallery_name}"                  
-       image_name                        =  "etn-es-eas-runner-Image-windowsbare2022-infra"       # "coverity-bare"                                      
-       image_version                     =  "2024.8.5"                                            #"2024.7.24"                                         
+       resource_group                    =  "ETN-ES-EAS-DEVSECOPS-PACKER"                          #"${var.managed_image_resource_group_name}"            
+       gallery_name                      =  "etn_packer_gallery"                     #"${var.managed_image_gallery_name}"                  
+       image_name                        =  "etn_es_runner_image_infra"       # "coverity-bare"                                      
+       image_version                     =  "2024.8.7"                                            #"2024.7.24"                                         
  }
 
   dynamic "azure_tag" {
