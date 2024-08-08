@@ -54,7 +54,7 @@ jobs:
 
       - name: Validate packer template
         run: |
-          GenerateResourcesAndImage -SubscriptionId  ${{ env.AZURE_SUBSCRIPTION_ID }} -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP }}"  -ImageType Windows2022CoverityBase    -AzureLocation "${{ env.AZURE_LOCATION }}" -AzureClientId "${{ secrets.AZURE_CLIENT_ID }}" -AzureClientSecret "${{ secrets.AZURE_CLIENT_SECRET }}"  -AzureTenantId "${{ secrets.AZURE_TENANT_ID }}"" -VirtualNetworkName "${{ env.VIRTUAL_NETWORK_NAME }}" -VirtualNetworkResourceGroupName "${{ env.VIRTUALNETWORK_RESOURCE_GROUP }}" -VirtualNetworkSubnetName " ${{ env.VIRTUAL_SUBNET_NAME }}" -GalleryName "${{ env.AZURE_GALLERY_NAME }}"
+          GenerateResourcesAndImage -SubscriptionId  "9013acaf-d6cc-4416-a9ed-7075ba759979" -ResourceGroupName "ETN-ES-EAS-DEVSECOPS-PACKER"  -ImageType Windows2022CoverityBase    -AzureLocation "East US" -AzureClientId "${{ secrets.AZURE_CLIENT_ID }}" -AzureClientSecret "${{ secrets.AZURE_CLIENT_SECRET }}"  -AzureTenantId "${{ secrets.AZURE_TENANT_ID }}"  -VirtualNetworkName "vnet-yukon-sbx-eus" -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary"  -VirtualNetworkSubnetName "AppSubnet" -GalleryName "etn_packer_gallery"
 
 #------------------------------------------------
 # - name: Checkout License Agreement Repository
