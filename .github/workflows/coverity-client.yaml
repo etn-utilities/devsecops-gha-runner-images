@@ -52,15 +52,3 @@ jobs:
         run: |
           Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force
           GenerateResourcesAndImage -SubscriptionId  "9013acaf-d6cc-4416-a9ed-7075ba759979" -ResourceGroupName "ETN-ES-EAS-DEVSECOPS-PACKER"  -ImageType Windows2022CoverityBase    -AzureLocation "East US" -AzureClientId "${{ secrets.AZURE_CLIENT_ID }}" -AzureClientSecret "${{ secrets.AZURE_CLIENT_SECRET }}"  -AzureTenantId "${{ secrets.AZURE_TENANT_ID }}"  -VirtualNetworkName "vnet-yukon-sbx-eus" -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary"  -VirtualNetworkSubnetName "AppSubnet" -GalleryName "etn_packer_gallery"  -ReuseResourceGroup
-
-#------------------------------------------------
-# - name: Checkout License Agreement Repository
-#   uses: actions/checkout@v2
-#   with:
-#     repository: catelleEMpei-Eaton/your-license-repo (etn-utilities/devsecops-cicdimage-ubuntu)
-#     path: license-repo (etn-utilities/devsecops-cicdimage-ubuntu)
-#     token: ${{ secrets.GITHUB_TOKEN }}
-
-# - name: Read and Display License Agreement
-#   run: |
-#     Get-Content "license-repo\path\to\license\agreement.txt" | Out-String
