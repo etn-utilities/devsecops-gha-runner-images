@@ -50,15 +50,11 @@ jobs:
 
       - name: Initialise Packer template
         run: |
-          packer init .\helpers\GenerateResourcesAndImage.ps1 -Force
+          Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force
 
       - name: Validate packer template
         run: |
-          packer validate .
-
-      - name: Validate packer template
-        run: |
-          packer build .
+          GenerateResourcesAndImage -SubscriptionId  ${{ env.AZURE_SUBSCRIPTION_ID }} -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP }}"  -ImageType Windows2022CoverityBase    -AzureLocation "${{ env.AZURE_LOCATION }}" -AzureClientId "${{ secrets.AZURE_CLIENT_ID }}" -AzureClientSecret "${{ secrets.AZURE_CLIENT_SECRET }}"  -AzureTenantId "${{ secrets.AZURE_TENANT_ID }}"" -VirtualNetworkName "${{ env.VIRTUAL_NETWORK_NAME }}" -VirtualNetworkResourceGroupName "${{ env.VIRTUALNETWORK_RESOURCE_GROUP }}" -VirtualNetworkSubnetName " ${{ env.VIRTUAL_SUBNET_NAME }}" -GalleryName "${{ env.AZURE_GALLERY_NAME }}"
 
 #------------------------------------------------
 # - name: Checkout License Agreement Repository
