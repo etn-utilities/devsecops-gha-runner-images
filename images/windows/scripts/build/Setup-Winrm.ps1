@@ -11,8 +11,8 @@ New-Item -Path WSMan:\LocalHost\Listener -Transport HTTPS -Address * -Certificat
 write-output "Setting up WinRM"
 write-host "(host) setting up WinRM"
 cmd.exe /c winrm quickconfig -q
-cmd.exe /c winrm set "winrm/config" '@{MaxTimeoutms="2800000"}'
-cmd.exe /c winrm set "winrm/config/winrs" '@{MaxMemoryPerShellMB="1024"}'
+cmd.exe /c winrm set "winrm/config" '@{MaxTimeoutms="3700000"}'
+cmd.exe /c winrm set "winrm/config/winrs" '@{MaxMemoryPerShellMB="2048"}'
 cmd.exe /c winrm set "winrm/config/service" '@{AllowUnencrypted="true"}'
 cmd.exe /c winrm set "winrm/config/client" '@{AllowUnencrypted="true"}'
 cmd.exe /c winrm set "winrm/config/service/auth" '@{Basic="true"}'
