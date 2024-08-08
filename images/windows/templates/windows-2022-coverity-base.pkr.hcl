@@ -267,14 +267,14 @@ build {
   #   ]
   # }
 
-  # provisioner "windows-shell" {
-  #   inline = [
-  #     "net user ${var.install_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
-  #     "net localgroup Administrators ${var.install_user} /add",
-  #     "winrm set winrm/config/service/auth @{Basic=\"true\"}",
-  #     "winrm get winrm/config/service/auth"
-  #   ]
-  # }
+  provisioner "windows-shell" {
+    inline = [
+      "net user ${var.install_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
+      "net localgroup Administrators ${var.install_user} /add",
+      "winrm set winrm/config/service/auth @{Basic=\"true\"}",
+      "winrm get winrm/config/service/auth"
+    ]
+  }
 
   # provisioner "powershell" {
   #   inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
