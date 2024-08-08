@@ -50,7 +50,7 @@ jobs:
 
       - name: Initialise Packer template
         run: |
-          packer init devsecops-gha-runner-images-EDODSO-979
+          packer init .\helpers\GenerateResourcesAndImage.ps1 -Force
 
       - name: Validate packer template
         run: |
