@@ -7,7 +7,7 @@ on:
 
 jobs:
   install-coverity:
-    runs-on: windows-latest
+    runs-on: self-hosted
     environment: Sandbox
 
     steps:
