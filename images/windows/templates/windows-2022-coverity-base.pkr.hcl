@@ -276,15 +276,15 @@ build {
     ]
   }
 
-  # provisioner "powershell" {
-  #   inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
-  # }
-
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
-    inline            = ["bcdedit.exe /set TESTSIGNING ON"]
+    inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
   }
+
+  # provisioner "powershell" {
+  #   elevated_password = "${var.install_password}"
+  #   elevated_user     = "${var.install_user}"
+  #   inline            = ["bcdedit.exe /set TESTSIGNING ON"]
+  # }
 
   # provisioner "powershell" {
   #   environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}"]
