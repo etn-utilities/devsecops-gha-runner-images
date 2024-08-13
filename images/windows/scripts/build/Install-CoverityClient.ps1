@@ -5,7 +5,7 @@ New-Item -Path "C:\temp" -ItemType Directory -Force
 
 # Define the source URL and destination path
 
-$sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-08-12T04:17:04Z&se=2024-08-12T12:17:04Z&spr=https&sv=2022-11-02&sr=b&sig=HWuuoMkW0OTfcZpVcr8tlzpa8I8nd8vnZTBLl0ZWSos%3D" 
+$sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-08-13T12:21:55Z&se=2024-08-13T20:21:55Z&spr=https&sv=2022-11-02&sr=b&sig=KdmArzF%2FOOv1T5XmelmchkrD9og3I%2FK6Jf%2Bmk5CCvLM%3D" 
 # $DEVOPS_ST_SAS_TOKEN = $env:DEVOPS_ST_SAS_TOKEN
 # $sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe? + $DEVOPS_ST_SAS_TOKEN
 $destinationPath = "C:\temp/cov-analysis-win64-2024.3.1.exe"
