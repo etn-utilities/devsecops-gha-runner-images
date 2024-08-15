@@ -6,7 +6,7 @@ on:
 
 jobs:
   install-coverity:
-    runs-on: ubuntu-runner
+    runs-on: self-hosted
     environment: Sandbox
     steps:
       - name: Checkout Repository
