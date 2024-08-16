@@ -38,7 +38,8 @@ jobs:
 
       - name: Run PowerShell Script
         run: |
-          pwsh -Command `
+          chmod +rwx./helpers/GenerateResourcesAndImage.ps1
+          pwsh -cwa `
           ./helpers/GenerateResourcesAndImage.ps1 `
           -subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }} `
           -resource-group-name "ETN-ES-EAS-DEVSECOPS-PACKER" `
