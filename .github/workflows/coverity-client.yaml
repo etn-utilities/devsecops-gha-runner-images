@@ -37,23 +37,22 @@ jobs:
           AZURE_LOCATION: ${{ env.AZURE_LOCATION }}
 
       - name: Run PowerShell Script
-        run: pwsh ./helpers/GenerateResourcesAndImage.ps1
-
-      - name: Initialise Packer template
         run: |
-          ./helpers/GenerateResourcesAndImage.sh \
-            --subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }} \
-            --resource-group-name "ETN-ES-EAS-DEVSECOPS-PACKER" \
-            --image-type "Windows2022CoverityBase" \
-            --azure-location "East US" \
-            --azure-client-id ${{ secrets.AZURE_CLIENT_ID }} \
-            --azure-client-secret ${{ secrets.AZURE_CLIENT_SECRET }} \
-            --azure-tenant-id ${{ secrets.AZURE_TENANT_ID }} \
-            --virtual-network-name "vnet-yukon-sbx-eus" \
-            --virtual-network-resource-group-name "ETN-ES-Yukon-Infra-Primary" \
-            --virtual-network-subnet-name "AppSubnet" \
-            --gallery-name "etn_packer_gallery" \
-            --reuse-resource-group
+          pwsh -Command `
+          ./helpers/GenerateResourcesAndImage.ps1 `
+          -subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }} `
+          -resource-group-name "ETN-ES-EAS-DEVSECOPS-PACKER" `
+          -image-type "Windows2022CoverityBase" `
+          -azure-location "East US" `
+          -azure-client-id ${{ secrets.AZURE_CLIENT_ID }} `
+          -azure-client-secret ${{ secrets.AZURE_CLIENT_SECRET }} `
+          -azure-tenant-id ${{ secrets.AZURE_TENANT_ID }} `
+          -virtual-network-name "vnet-yukon-sbx-eus" `
+          -virtual-network-resource-group-name "ETN-ES-Yukon-Infra-Primary" `
+          -virtual-network-subnet-name "AppSubnet" `
+          -gallery-name "etn_packer_gallery" `
+          -ReuseResourceGroup
+
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
