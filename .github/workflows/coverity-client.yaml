@@ -38,7 +38,7 @@ jobs:
 
       - name: Run PowerShell Script
         run: |
-          chmod +rwx./helpers/GenerateResourcesAndImage.ps1
+          chmod +rwx ./helpers/GenerateResourcesAndImage.ps1
           pwsh -cwa `
           ./helpers/GenerateResourcesAndImage.ps1 `
           -subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }} `
