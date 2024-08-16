@@ -36,13 +36,6 @@ jobs:
           AZURE_GALLERY_NAME: ${{ env.AZURE_GALLERY_NAME }}
           AZURE_LOCATION: ${{ env.AZURE_LOCATION }}
 
-      - name: Install PowerShell
-        run: |
-          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          sudo apt-add-repository https://packages.microsoft.com/ubuntu/22.04/prod
-          sudo apt-get update
-          sudo apt-get install -y powershell
-
       - name: Run PowerShell Script
         run: pwsh ./helpers/GenerateResourcesAndImage.ps1
 
