@@ -51,9 +51,7 @@ jobs:
           -VirtualNetworkName vnet-yukon-sbx-eus `
           -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary" `
           -VirtualNetworkSubnetName AppSubnet `
-          -GalleryName "etn_packer_gallery" `  
-          -ReuseResourceGroup true `
-          -noninteractive
+          -GalleryName "etn_packer_gallery"
 
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
