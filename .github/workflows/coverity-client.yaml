@@ -39,7 +39,8 @@ jobs:
       - name: Run PowerShell Script
         shell: pwsh
         run: |
-          ./helpers/GenerateResourcesAndImage.ps1 `
+          Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force 
+          GenerateResourcesAndImage `
           -subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }} `
           -resource-group-name "ETN-ES-EAS-DEVSECOPS-PACKER" `
           -image-type "Windows2022CoverityBase" `
