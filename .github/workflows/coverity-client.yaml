@@ -25,7 +25,7 @@ jobs:
           az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} -p="${{ secrets.AZURE_CLIENT_SECRET }}" --tenant ${{ secrets.AZURE_TENANT_ID }}
           #az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         env:
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ env.AZURE_SUBSCRIPTION_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
@@ -41,7 +41,7 @@ jobs:
         run: |
           Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force 
           GenerateResourcesAndImage `
-          -subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }} `
+          -subscription-id ${{ env.AZURE_SUBSCRIPTION_ID }} `
           -resource-group-name "ETN-ES-EAS-DEVSECOPS-PACKER" `
           -image-type "Windows2022CoverityBase" `
           -azure-location "East US" `
