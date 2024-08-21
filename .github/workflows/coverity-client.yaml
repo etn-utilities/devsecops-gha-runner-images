@@ -14,7 +14,7 @@ jobs:
 
       - name: Write license to file
         run: |
-          if [ ! -z "${{ secrets.COVERITY_LICENSE }}" ]; then echo "${{ secrets.COVERITY_LICENSE }}" | base64 -d > images/windows/scripts/build/license.dat ; else exit 1; fi
+          if [ ! -z "${{ secrets.COVERITY_LICENSE }}" ]; then echo "${{ secrets.COVERITY_LICENSE }}" | base64 -d > pwd/license.dat ; else exit 1; fi
 
       - name: Authentication on Azure
         run: |
