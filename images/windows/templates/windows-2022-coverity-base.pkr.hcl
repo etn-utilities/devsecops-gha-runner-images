@@ -234,19 +234,19 @@ source "azure-arm" "image" {
 build {
   sources = ["source.azure-arm.image"]
 
-  provisioner "powershell" {
-    inline = ["New-Item -Path ${var.image_folder} -ItemType Directory -Force"]
-  }
+  # provisioner "powershell" {
+  #   inline = ["New-Item -Path ${var.image_folder} -ItemType Directory -Force"]
+  # }
 
-  provisioner "file" {
-    destination = "${var.image_folder}\\"
-    sources     = [
-      #  "${path.root}/../assets",
-       "${path.root}/../scripts",
-       "${path.root}/../license.dat",
-      # "${path.root}/../toolsets"
-    ]
-  }
+  # provisioner "file" {
+  #   destination = "${var.image_folder}\\"
+  #   sources     = [
+  #     #  "${path.root}/../assets",
+  #      "${path.root}/../scripts",
+  #      "${path.root}/../license.dat",
+  #     # "${path.root}/../toolsets"
+  #   ]
+  # }
 
   # provisioner "file" {
   #   destination = "${var.image_folder}\\scripts\\docs-gen\\"
@@ -287,6 +287,12 @@ build {
   #   inline            = ["bcdedit.exe /set TESTSIGNING ON"]
   # }
 
+ provisioner "powershell" {
+    inline = [
+      "Write-Output 'Applying license...'",
+      "C:\image\scripts\build\license.dat"
+    ]
+  }
   # provisioner "powershell" {
   #   environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}"]
   #   execution_policy = "unrestricted"
