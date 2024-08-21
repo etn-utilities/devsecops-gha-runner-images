@@ -5,7 +5,7 @@
 
 #  Define the source URL and destination path
 
- $sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-08-20T10:24:04Z&se=2024-08-20T18:24:04Z&spr=https&sv=2022-11-02&sr=b&sig=8CHqTf3Z6E4FdGiKsnSDlIQdThqOhtIgra%2BOMIQVA7g%3D" 
+ $sourceUrl="https://stsmpdevopsimages.blob.core.windows.net/armimagelayeraddons/synopsys/coverity/cov-analysis-win64-2024.3.1.exe?sp=r&st=2024-08-21T02:20:59Z&se=2024-08-21T10:20:59Z&spr=https&sv=2022-11-02&sr=b&sig=AbEd8GEawLUr4TKjBZw7Y3cHtNXeN0Z5dSkFGKaiJqU%3D" 
 
  $destinationPath = "C:\temp/cov-analysis-win64-2024.3.1.exe"
 if (-not (Get-Command azcopy -ErrorAction SilentlyContinue)) {
