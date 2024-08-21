@@ -287,12 +287,7 @@ build {
   #   inline            = ["bcdedit.exe /set TESTSIGNING ON"]
   # }
 
- provisioner "powershell" {
-    inline = [
-      "Write-Output 'Applying license...'",
-      "C:\image\scripts\build\license.dat"
-    ]
-  }
+
   # provisioner "powershell" {
   #   environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}"]
   #   execution_policy = "unrestricted"
