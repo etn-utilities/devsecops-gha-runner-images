@@ -219,7 +219,7 @@ source "azure-arm" "image" {
        resource_group                    =  "ETN-ES-EAS-DEVSECOPS-PACKER"                          #"${var.managed_image_resource_group_name}"            
        gallery_name                      =  "etn_packer_gallery"                     #"${var.managed_image_gallery_name}"                  
        image_name                        =  "etn_es_runner_image_infra"       # "coverity-bare"                                      
-       image_version                     =  "24.8.21"                                            #"2024.7.24"                                         
+       image_version                     =  "1.0.8"                                            #"2024.7.24"                                         
  }
 
   dynamic "azure_tag" {
