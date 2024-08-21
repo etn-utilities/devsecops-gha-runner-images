@@ -12,13 +12,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Create Temp Directory
-        run: |
-          mkdir -p /tmp/temp
-
       - name: Write license to file
         run: |
-          if [ ! -z "${{ secrets.COVERITY_LICENSE }}" ]; then echo "${{ secrets.COVERITY_LICENSE }}" | base64 -d > /tmp/temp/license.dat; else exit 1; fi
+          if [ ! -z "${{ secrets.COVERITY_LICENSE }}" ]; then echo "${{ secrets.COVERITY_LICENSE }}" | base64 -d > /tmp/license.dat; else exit 1; fi
+          ls -ali
+          cat /tmp/license.dat
 
       - name: Authentication on Azure
         run: |
@@ -40,18 +38,18 @@ jobs:
         shell: pwsh
         run: |
           Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force 
-          GenerateResourcesAndImage `
-          -SubscriptionId 9013acaf-d6cc-4416-a9ed-7075ba759979 `
-          -ResourceGroupName "ETN-ES-EAS-DEVSECOPS-PACKER" `
-          -ImageType "Windows2022CoverityBase"   `
-          -AzureLocation "East US" `
-          -AzureClientId ${{ secrets.AZURE_CLIENT_ID }} `
-          -AzureClientSecret ${{ secrets.AZURE_CLIENT_SECRET }}   `
-          -AzureTenantId ${{ secrets.AZURE_TENANT_ID }} `
-          -VirtualNetworkName vnet-yukon-sbx-eus `
-          -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary" `
-          -VirtualNetworkSubnetName AppSubnet `
-          -GalleryName "etn_packer_gallery"
+          # GenerateResourcesAndImage `
+          # -SubscriptionId 9013acaf-d6cc-4416-a9ed-7075ba759979 `
+          # -ResourceGroupName "ETN-ES-EAS-DEVSECOPS-PACKER" `
+          # -ImageType "Windows2022CoverityBase"   `
+          # -AzureLocation "East US" `
+          # -AzureClientId ${{ secrets.AZURE_CLIENT_ID }} `
+          # -AzureClientSecret ${{ secrets.AZURE_CLIENT_SECRET }}   `
+          # -AzureTenantId ${{ secrets.AZURE_TENANT_ID }} `
+          # -VirtualNetworkName vnet-yukon-sbx-eus `
+          # -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary" `
+          # -VirtualNetworkSubnetName AppSubnet `
+          # -GalleryName "etn_packer_gallery"
 
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
