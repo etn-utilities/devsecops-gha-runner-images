@@ -358,6 +358,7 @@ build {
       # "${path.root}/../scripts/build/Install-JavaTools.ps1",
       #"${path.root}/../scripts/build/Install-Azcopy.ps1",
       "${path.root}/../scripts/build/Install-CoverityClient.ps1",
+      "${path.root}/../scripts/build/Install-license.dat",
       # "${path.root}/../scripts/build/Install-Kotlin.ps1",
   #      "${path.root}/../scripts/build/Install-OpenSSL.ps1"
     ]
