@@ -20,7 +20,7 @@ if (-not (Get-Command azcopy -ErrorAction SilentlyContinue)) {
  }
 
 # Install the Coverity client
-Start-Process -FilePath "c:\temp\cov-analysis-win64-2024.3.1.exe" -WorkingDirectory "c:\temp" -ArgumentList "-q","--license.region=1","--license.agreement=agree","--license.cov.path=""/tmp/temp/license.dat""" -Wait
+Start-Process -FilePath "c:\temp\cov-analysis-win64-2024.3.1.exe" -WorkingDirectory "c:\temp" -ArgumentList "-q","--license.region=1","--license.agreement=agree","--license.cov.path=""c:\images\scripts\build\license.dat""" -Wait
 
 
       

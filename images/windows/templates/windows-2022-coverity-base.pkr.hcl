@@ -241,9 +241,9 @@ build {
   provisioner "file" {
     destination = "${var.image_folder}\\"
     sources     = [
-       "${path.root}/../assets",
+      #  "${path.root}/../assets",
        "${path.root}/../scripts",
-       "${path.root}/../toolsets"
+      #  "${path.root}/../toolsets"
     ]
   }
 
