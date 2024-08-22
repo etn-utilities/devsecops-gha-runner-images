@@ -82,6 +82,10 @@ variable "install_user" {
   type    = string
   default = "installer"
 }
+# variable "install_user1" {
+#   type    = string
+#   default = "installer"
+}
 
 variable "location" {
   type    = string
@@ -164,10 +168,10 @@ source "azure-arm" "image" {
    
    shared_image_gallery{
 	    subscription = "9013acaf-d6cc-4416-a9ed-7075ba759979"
-	    resource_group =   "ETN-ES-EAS-DEVSECOPS-PACKER"                  #"etn-es-eas-devsecops-infra"
-	    gallery_name =  "etn_packer_gallery"                        #"etn_es_eas_packer_gallery_infra"
-	    image_name =     "etn_es_runner_image_infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
-	    image_version = "1.0.2"              #"24.8.1" 
+	    resource_group =   "etn-es-eas-devsecops-infra"                  #"etn-es-eas-devsecops-infra"
+	    gallery_name =  "etn_es_eas_packer_gallery_infra"                        #"etn_es_eas_packer_gallery_infra"
+	    image_name =     "etn-es-eas-runner-windows-infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
+	    image_version = "1.0.0"               #"24.8.1" 
 	}
   # image_offer                            = "WindowsServer"
   # image_publisher                        = "MicrosoftWindowsServer"
@@ -196,10 +200,10 @@ source "azure-arm" "image" {
  
    shared_image_gallery_destination{
 	    subscription = "9013acaf-d6cc-4416-a9ed-7075ba759979"
-	    resource_group =   "ETN-ES-EAS-DEVSECOPS-PACKER"                  #"etn-es-eas-devsecops-infra"
-	    gallery_name =  "etn_packer_gallery"                        #"etn_es_eas_packer_gallery_infra"
-	    image_name =     "etn_es_runner_image_infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
-	    image_version = "1.0.0"                                    #"24.8.2"                                   
+	    resource_group =   "etn-es-eas-devsecops-infra"                  #"etn-es-eas-devsecops-infra"
+	    gallery_name =  "etn_es_eas_packer_gallery_infra"                        #"etn_es_eas_packer_gallery_infra"
+	    image_name =     "etn-es-eas-runner-windows-infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
+	    image_version = "24.8.2"                                    #"24.8.2"                                   
 	}
 
   dynamic "azure_tag" {
@@ -308,21 +312,21 @@ build {
     restart_timeout = "30m"
   }
 
-  # provisioner "powershell" {
-  #   elevated_password = "${var.install_password}"
-  #   elevated_user     = "${var.install_user}"
-  #   environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
-  #   scripts           = [
-  #     "${path.root}/../scripts/build/Install-VisualStudio.ps1",
-  #     #"${path.root}/../scripts/build/Install-KubernetesTools.ps1"
-  #   ]
-  #   valid_exit_codes  = [0, 3010]
-  # }
+  provisioner "powershell" {
+    elevated_password = "${var.install_password}"
+    elevated_user     = "${var.install_user}"
+    environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
+    scripts           = [
+      "${path.root}/../scripts/build/Install-VisualStudio.ps1",
+      #"${path.root}/../scripts/build/Install-KubernetesTools.ps1"
+    ]
+    valid_exit_codes  = [0, 3010]
+  }
 
-  # provisioner "windows-restart" {
-  #   check_registry  = true
-  #   restart_timeout = "10m"
-  # }
+  provisioner "windows-restart" {
+    check_registry  = true
+    restart_timeout = "10m"
+  }
 
   provisioner "powershell" {
     pause_before     = "2m0s"
@@ -331,7 +335,7 @@ build {
       "${path.root}/../scripts/build/Install-Wix.ps1",
       "${path.root}/../scripts/build/Install-WDK.ps1",
       "${path.root}/../scripts/build/Install-VSExtensions.ps1",
-      "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
+      #"${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
       # "${path.root}/../scripts/build/Install-AzureCli.ps1",
       # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
       
@@ -355,9 +359,9 @@ build {
     inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
   }
 
-  # provisioner "powershell" {
-  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
-  #   scripts          = [
+    provisioner "powershell" {
+      environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
+      scripts          = [
       "${path.root}/../scripts/build/Install-ActionsCache.ps1",
        "${path.root}/../scripts/build/Install-Azcopy.ps1",
       # "${path.root}/../scripts/build/Install-Ruby.ps1",
@@ -405,8 +409,8 @@ build {
       # "${path.root}/../scripts/build/Install-MongoDB.ps1",
       # "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
       # "${path.root}/../scripts/build/Configure-Diagnostics.ps1"
-  #   ]
-  # }
+    ]
+  }
 
   # provisioner "powershell" {
   #   elevated_password = "${var.install_password}"
@@ -422,11 +426,11 @@ build {
   #   ]
   # }
 
-  # provisioner "windows-restart" {
-  #   check_registry        = true
-  #   restart_check_command = "powershell -command \"& {if ((-not (Get-Process TiWorker.exe -ErrorAction SilentlyContinue)) -and (-not [System.Environment]::HasShutdownStarted) ) { Write-Output 'Restart complete' }}\""
-  #   restart_timeout       = "30m"
-  # }
+  provisioner "windows-restart" {
+    check_registry        = true
+    restart_check_command = "powershell -command \"& {if ((-not (Get-Process TiWorker.exe -ErrorAction SilentlyContinue)) -and (-not [System.Environment]::HasShutdownStarted) ) { Write-Output 'Restart complete' }}\""
+    restart_timeout       = "30m"
+  }
 
   provisioner "powershell" {
     pause_before     = "30m0s"
@@ -437,14 +441,14 @@ build {
     ]
   }
 
-  # provisioner "powershell" {
-  #   environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_FOLDER=${var.image_folder}"]
-  #   inline           = ["pwsh -File '${var.image_folder}\\SoftwareReport\\Generate-SoftwareReport.ps1'"]
-  # }
+  provisioner "powershell" {
+    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_FOLDER=${var.image_folder}"]
+    inline           = ["pwsh -File '${var.image_folder}\\SoftwareReport\\Generate-SoftwareReport.ps1'"]
+  }
 
-  # provisioner "powershell" {
-  #   inline = ["if (-not (Test-Path C:\\software-report.md)) { throw 'C:\\software-report.md not found' }", "if (-not (Test-Path C:\\software-report.json)) { throw 'C:\\software-report.json not found' }"]
-  # }
+  provisioner "powershell" {
+    inline = ["if (-not (Test-Path C:\\software-report.md)) { throw 'C:\\software-report.md not found' }", "if (-not (Test-Path C:\\software-report.json)) { throw 'C:\\software-report.json not found' }"]
+  }
 
   # provisioner "file" {
   #   destination = "${path.root}/../Windows2022-Readme.md"

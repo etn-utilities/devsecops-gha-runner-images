@@ -83,6 +83,11 @@ variable "install_user" {
   default = "installer"
 }
 
+variable "install_user1" {
+  type    = string
+  default = "installer1"
+}
+
 variable "location" {
   type    = string
   default = "${env("ARM_RESOURCE_LOCATION")}"
@@ -167,10 +172,10 @@ source "azure-arm" "image" {
 
    shared_image_gallery{
 	    subscription = "9013acaf-d6cc-4416-a9ed-7075ba759979"
-	    resource_group =   "ETN-ES-EAS-DEVSECOPS-PACKER"                  #"etn-es-eas-devsecops-infra"
-	    gallery_name =  "etn_packer_gallery"                        #"etn_es_eas_packer_gallery_infra"
-	    image_name =     "etn_es_runner_image_infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
-	    image_version = "1.0.2"                                    #"24.8.2"                                   
+	    resource_group =   "etn-es-eas-devsecops-infra"                  #"etn-es-eas-devsecops-infra"
+	    gallery_name =  "etn_es_eas_packer_gallery_infra"                        #"etn_es_eas_packer_gallery_infra"
+	    image_name =     "etn-es-eas-runner-windows-infra"             #"etn-es-eas-runner-Image-windowsbare2022-infra"
+	    image_version = "1.0.2"                                     #"1.0."                                                                      
 	}
   # managed_image_name                     = "${local.managed_image_name}"
   # managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
@@ -193,9 +198,9 @@ source "azure-arm" "image" {
   winrm_username                         = "packer"
 
  shared_image_gallery_destination {
-       resource_group =  "ETN-ES-EAS-DEVSECOPS-PACKER"               #"${var.managed_image_resource_group_name}"
-       gallery_name =   "etn_packer_gallery"                         #"${var.managed_image_gallery_name}"
-       image_name = "etn_es_runner_image_infra"                        #       "${local.managed_image_name}"
+       resource_group =  "etn-es-eas-devsecops-infra"               #"${var.managed_image_resource_group_name}"
+       gallery_name =   "etn_es_eas_packer_gallery_infra"                         #"${var.managed_image_gallery_name}"
+       image_name = "etn-es-eas-runner-windows-infra"                        #       "${local.managed_image_name}"
        image_version =  "1.0.0"                                       #"${var.image_version}"
  }
 
@@ -311,7 +316,7 @@ build {
   #   environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
   #   scripts           = [
   #     "${path.root}/../scripts/build/Install-VisualStudio.ps1",
-  #     "${path.root}/../scripts/build/Install-KubernetesTools.ps1"
+  #     #"${path.root}/../scripts/build/Install-KubernetesTools.ps1"
   #   ]
   #   valid_exit_codes  = [0, 3010]
   # }
@@ -325,10 +330,10 @@ build {
     # pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      # "${path.root}/../scripts/build/Install-Wix.ps1",
-      # "${path.root}/../scripts/build/Install-WDK.ps1",
-      # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
-      # "${path.root}/../scripts/build/Install-AzureCli.ps1",
+      #  "${path.root}/../scripts/build/Install-Wix.ps1",
+      #  "${path.root}/../scripts/build/Install-WDK.ps1",
+      #  "${path.root}/../scripts/build/Install-VSExtensions.ps1",
+       "${path.root}/../scripts/build/Install-AzureCli.ps1",
       # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
       "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
       # "${path.root}/../scripts/build/Install-JavaTools.ps1",
@@ -354,17 +359,17 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      # "${path.root}/../scripts/build/Install-ActionsCache.ps1",
+       "${path.root}/../scripts/build/Install-ActionsCache.ps1",
       # "${path.root}/../scripts/build/Install-Ruby.ps1",
       # "${path.root}/../scripts/build/Install-PyPy.ps1",
-      "${path.root}/../scripts/build/Install-Toolset.ps1",
+      #"${path.root}/../scripts/build/Install-Toolset.ps1",
       # "${path.root}/../scripts/build/Configure-Toolset.ps1",
       "${path.root}/../scripts/build/Install-NodeJS.ps1",
       # "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
       # "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
       # "${path.root}/../scripts/build/Install-Pipx.ps1",
-      "${path.root}/../scripts/build/Install-Git.ps1",
-      "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
+       "${path.root}/../scripts/build/Install-Git.ps1",
+       "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
       # "${path.root}/../scripts/build/Install-PHP.ps1",
       # "${path.root}/../scripts/build/Install-Rust.ps1",
       # "${path.root}/../scripts/build/Install-Sbt.ps1",
