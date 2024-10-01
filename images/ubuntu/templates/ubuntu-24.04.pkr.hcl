@@ -2,18 +2,20 @@ packer {
   required_plugins {
     azure = {
       source  = "github.com/hashicorp/azure"
-      version = "1.4.5"
+      version = "2.1.8"
     }
   }
-}
-
-locals {
-  managed_image_name = var.managed_image_name != "" ? var.managed_image_name : "packer-${var.image_os}-${var.image_version}"
 }
 
 variable "allowed_inbound_ip_addresses" {
   type    = list(string)
   default = []
+}
+
+variable "application_id" {
+  type      = string
+  default   = "${env("ARM_APP_ID")}"
+  sensitive = true
 }
 
 variable "azure_tags" {
@@ -98,6 +100,11 @@ variable "managed_image_name" {
   default = ""
 }
 
+variable "managed_image_gallery_name" {
+  type    = string
+  default = ""
+}
+
 variable "managed_image_resource_group_name" {
   type    = string
   default = "${env("ARM_RESOURCE_GROUP")}"
@@ -144,27 +151,32 @@ variable "vm_size" {
 }
 
 source "azure-arm" "build_image" {
-  allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
-  build_resource_group_name              = "${var.build_resource_group_name}"
-  client_cert_path                       = "${var.client_cert_path}"
-  client_id                              = "${var.client_id}"
-  client_secret                          = "${var.client_secret}"
+  subscription_id                         = "${var.subscription_id}"
+  client_id                               = "${var.application_id}" # this is the one they want ¯\_(ツ)_/¯
+  client_secret                           = "${var.client_secret}"
+
+  allowed_inbound_ip_addresses            = "${var.allowed_inbound_ip_addresses}"
   image_offer                            = "ubuntu-24_04-lts"
   image_publisher                        = "canonical"
   image_sku                              = "server-gen1"
   location                               = "${var.location}"
-  managed_image_name                     = "${local.managed_image_name}"
-  managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   os_disk_size_gb                        = "75"
   os_type                                = "Linux"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
-  subscription_id                        = "${var.subscription_id}"
+
   temp_resource_group_name               = "${var.temp_resource_group_name}"
   tenant_id                              = "${var.tenant_id}"
   virtual_network_name                   = "${var.virtual_network_name}"
   virtual_network_resource_group_name    = "${var.virtual_network_resource_group_name}"
   virtual_network_subnet_name            = "${var.virtual_network_subnet_name}"
   vm_size                                = "${var.vm_size}"
+
+  shared_image_gallery_destination {
+    resource_group = "${var.managed_image_resource_group_name}"
+    gallery_name = "${var.managed_image_gallery_name}"
+    image_name =   "${var.managed_image_name}"
+    image_version = "${var.image_version}"
+  }
 
   dynamic "azure_tag" {
     for_each = var.azure_tags

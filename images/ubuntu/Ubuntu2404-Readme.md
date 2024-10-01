@@ -1,12 +1,7 @@
-| Announcements |
-|-|
-| [Ubuntu-latest workflows will use Ubuntu-24.04 image](https://github.com/actions/runner-images/issues/10636) |
-| [[Ubuntu 20 and 22] Go version 1.20.0 will be removed on October 14,2024.](https://github.com/actions/runner-images/issues/10607) |
-***
 # Ubuntu 24.04
 - OS Version: 24.04.1 LTS
-- Kernel Version: 6.8.0-1014-azure
-- Image Version: 20240922.1.0
+- Kernel Version: 6.8.0-1015-azure
+- Image Version: 2024.09.27
 - Systemd version: 255.4-1ubuntu8.4
 
 ## Installed Software
@@ -25,19 +20,19 @@
 - Perl 5.38.2
 - Python 3.12.3
 - Ruby 3.2.3
-- Swift 6.0
+- Swift 6.0.1
 
 ### Package Management
 - cpan 1.64
 - Helm 3.16.1
-- Homebrew 4.3.23
+- Homebrew 4.3.24
 - Miniconda 24.7.1
 - Npm 10.8.2
 - Pip 24.0
 - Pip3 24.0
 - Pipx 1.4.3
 - RubyGems 3.4.20
-- Vcpkg (build from commit 98aa63962)
+- Vcpkg (build from commit 76d153790)
 - Yarn 1.22.22
 
 #### Environment variables
@@ -56,7 +51,7 @@ to accomplish this.
 
 ### Project Management
 - Ant 1.10.14
-- Gradle 8.10.1
+- Gradle 8.10.2
 - Lerna 8.1.8
 - Maven 3.8.8
 
@@ -65,17 +60,17 @@ to accomplish this.
 - AzCopy 10.26.0 - available by `azcopy` and `azcopy10` aliases
 - Bazel 7.3.1
 - Bazelisk 1.21.0
-- Bicep 0.30.3
+- Bicep 0.30.23
 - Buildah 1.33.7
-- CMake 3.30.3
+- CMake 3.30.4
 - CodeQL Action Bundle 2.19.0
 - Docker Amazon ECR Credential Helper 0.9.0
 - Docker Compose v2 2.27.1
 - Docker-Buildx 0.17.1
 - Docker Client 26.1.3
 - Docker Server 26.1.3
-- Fastlane 2.222.0
-- Git 2.46.1
+- Fastlane 2.223.1
+- Git 2.46.2
 - Git LFS 3.5.1
 - Git-ftp 1.6.0
 - Haveged 1.9.14
@@ -92,7 +87,7 @@ to accomplish this.
 - Packer 1.11.2
 - Parcel 2.12.0
 - Podman 4.9.3
-- Pulumi 3.133.0
+- Pulumi 3.134.1
 - Skopeo 1.13.3
 - Sphinx Open Source Search Server 2.2.11
 - yamllint 1.35.1
@@ -100,9 +95,9 @@ to accomplish this.
 - zstd 1.5.6
 
 ### CLI Tools
-- AWS CLI 2.17.56
+- AWS CLI 2.17.60
 - AWS CLI Session Manager Plugin 1.2.650.0
-- AWS SAM CLI 1.124.0
+- AWS SAM CLI 1.125.0
 - Azure CLI 2.64.0
 - Azure CLI (azure-devops) 1.0.1
 - GitHub CLI 2.57.0
@@ -139,11 +134,11 @@ Both Xdebug and PCOV extensions are installed, but only Xdebug is enabled.
 - Rustfmt 1.7.1
 
 ### Browsers and Drivers
-- Google Chrome 129.0.6668.58
-- ChromeDriver 129.0.6668.58
+- Google Chrome 129.0.6668.70
+- ChromeDriver 129.0.6668.70
 - Chromium 129.0.6668.0
-- Microsoft Edge 129.0.2792.52
-- Microsoft Edge WebDriver 129.0.2792.53
+- Microsoft Edge 129.0.2792.65
+- Microsoft Edge WebDriver 129.0.2792.65
 - Selenium server 4.25.0
 - Mozilla Firefox 130.0.1
 - Geckodriver 0.35.0
@@ -311,4 +306,3 @@ Use the following command as a part of your job to start the service: 'sudo syst
 | xz-utils               | 5.6.1+really5.4.5-1build0.1 |
 | zip                    | 3.0-13build1                |
 | zsync                  | 0.6.2-5build1               |
-
