@@ -398,3 +398,4 @@ launch.json
 
 # Ignore dynamic template
 images/*/*-temp.json
+
