@@ -3,7 +3,7 @@ on:
   workflow_dispatch: 
   push:
     branches:
-      - cem/EDODSO-979
+      - rahuls/EDODSO-1910
 
 jobs:
   install-coverity:
