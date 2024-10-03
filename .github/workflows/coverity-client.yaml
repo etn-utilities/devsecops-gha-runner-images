@@ -38,7 +38,7 @@ jobs:
           Import-Module .\helpers\GenerateResourcesAndImage.ps1 -Force 
           GenerateResourcesAndImage `
           -SubscriptionId 9013acaf-d6cc-4416-a9ed-7075ba759979 `
-          -ResourceGroupName "ETN-ES-EAS-DEVSECOPS-PACKER" `
+          -ResourceGroupName "etn-es-eas-devsecops-infra" `
           -ImageType "Windows2022CoverityBase"   `
           -AzureLocation "East US" `
           -AzureClientId ${{ secrets.AZURE_CLIENT_ID }} `
@@ -47,7 +47,7 @@ jobs:
           -VirtualNetworkName vnet-yukon-sbx-eus `
           -VirtualNetworkResourceGroupName "ETN-ES-Yukon-Infra-Primary" `
           -VirtualNetworkSubnetName AppSubnet `
-          -GalleryName "etn_packer_gallery"
+          -GalleryName "etn_es_eas_packer_gallery_infra"
 
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
