@@ -2,18 +2,20 @@ packer {
   required_plugins {
     azure = {
       source  = "github.com/hashicorp/azure"
-      version = "1.4.5"
+      version = "2.1.8"
     }
   }
-}
-
-locals {
-  managed_image_name = var.managed_image_name != "" ? var.managed_image_name : "packer-${var.image_os}-${var.image_version}"
 }
 
 variable "allowed_inbound_ip_addresses" {
   type    = list(string)
   default = []
+}
+
+variable "application_id" {
+  type      = string
+  default   = "${env("ARM_APP_ID")}"
+  sensitive = true
 }
 
 variable "azure_tags" {
@@ -98,6 +100,11 @@ variable "managed_image_name" {
   default = ""
 }
 
+variable "managed_image_gallery_name" {
+  type    = string
+  default = ""
+}
+
 variable "managed_image_resource_group_name" {
   type    = string
   default = "${env("ARM_RESOURCE_GROUP")}"
@@ -144,27 +151,32 @@ variable "vm_size" {
 }
 
 source "azure-arm" "build_image" {
-  allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
-  build_resource_group_name              = "${var.build_resource_group_name}"
-  client_cert_path                       = "${var.client_cert_path}"
-  client_id                              = "${var.client_id}"
-  client_secret                          = "${var.client_secret}"
+  subscription_id                         = "${var.subscription_id}"
+  client_id                               = "${var.application_id}" # this is the one they want ¯\_(ツ)_/¯
+  client_secret                           = "${var.client_secret}"
+
+  allowed_inbound_ip_addresses            = "${var.allowed_inbound_ip_addresses}"
   image_offer                            = "ubuntu-24_04-lts"
   image_publisher                        = "canonical"
   image_sku                              = "server-gen1"
   location                               = "${var.location}"
-  managed_image_name                     = "${local.managed_image_name}"
-  managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   os_disk_size_gb                        = "75"
   os_type                                = "Linux"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
-  subscription_id                        = "${var.subscription_id}"
+
   temp_resource_group_name               = "${var.temp_resource_group_name}"
   tenant_id                              = "${var.tenant_id}"
   virtual_network_name                   = "${var.virtual_network_name}"
   virtual_network_resource_group_name    = "${var.virtual_network_resource_group_name}"
   virtual_network_subnet_name            = "${var.virtual_network_subnet_name}"
   vm_size                                = "${var.vm_size}"
+
+  shared_image_gallery_destination {
+    resource_group = "${var.managed_image_resource_group_name}"
+    gallery_name = "${var.managed_image_gallery_name}"
+    image_name =   "${var.managed_image_name}"
+    image_version = "${var.image_version}"
+  }
 
   dynamic "azure_tag" {
     for_each = var.azure_tags
@@ -183,13 +195,18 @@ build {
     inline          = ["mkdir ${var.image_folder}", "chmod 777 ${var.image_folder}"]
   }
 
+  provisioner "file" {
+    destination = "${var.helper_script_folder}"
+    source      = "${path.root}/../scripts/helpers"
+  }
+
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     script          = "${path.root}/../scripts/build/configure-apt-mock.sh"
   }
 
   provisioner "shell" {
-    environment_vars = ["DEBIAN_FRONTEND=noninteractive"]
+    environment_vars = ["HELPER_SCRIPTS=${var.helper_script_folder}","DEBIAN_FRONTEND=noninteractive"]
     execute_command  = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     scripts          = [
       "${path.root}/../scripts/build/install-ms-repos.sh",
@@ -201,11 +218,6 @@ build {
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     script          = "${path.root}/../scripts/build/configure-limits.sh"
-  }
-
-  provisioner "file" {
-    destination = "${var.helper_script_folder}"
-    source      = "${path.root}/../scripts/helpers"
   }
 
   provisioner "file" {
@@ -284,11 +296,14 @@ provisioner "shell" {
       "${path.root}/../scripts/build/install-apache.sh",
       "${path.root}/../scripts/build/install-aws-tools.sh",
       "${path.root}/../scripts/build/install-clang.sh",
+      "${path.root}/../scripts/build/install-swift.sh",
       "${path.root}/../scripts/build/install-cmake.sh",
       "${path.root}/../scripts/build/install-codeql-bundle.sh",
       "${path.root}/../scripts/build/install-container-tools.sh",
       "${path.root}/../scripts/build/install-dotnetcore-sdk.sh",
+      "${path.root}/../scripts/build/install-microsoft-edge.sh",
       "${path.root}/../scripts/build/install-gcc-compilers.sh",
+      "${path.root}/../scripts/build/install-firefox.sh",
       "${path.root}/../scripts/build/install-gfortran.sh",
       "${path.root}/../scripts/build/install-git.sh",
       "${path.root}/../scripts/build/install-git-lfs.sh",
@@ -298,6 +313,7 @@ provisioner "shell" {
       "${path.root}/../scripts/build/install-java-tools.sh",
       "${path.root}/../scripts/build/install-kubernetes-tools.sh",
       "${path.root}/../scripts/build/install-miniconda.sh",
+      "${path.root}/../scripts/build/install-kotlin.sh",
       "${path.root}/../scripts/build/install-mysql.sh",
       "${path.root}/../scripts/build/install-nginx.sh",
       "${path.root}/../scripts/build/install-nodejs.sh",
@@ -309,6 +325,7 @@ provisioner "shell" {
       "${path.root}/../scripts/build/install-rust.sh",
       "${path.root}/../scripts/build/install-julia.sh",
       "${path.root}/../scripts/build/install-selenium.sh",
+      "${path.root}/../scripts/build/install-packer.sh",
       "${path.root}/../scripts/build/install-vcpkg.sh",
       "${path.root}/../scripts/build/configure-dpkg.sh",
       "${path.root}/../scripts/build/install-yq.sh",
