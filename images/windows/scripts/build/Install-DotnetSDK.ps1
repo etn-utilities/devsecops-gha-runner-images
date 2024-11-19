@@ -126,7 +126,11 @@ Copy-Item -Path $nugetPath -Destination "C:\Users\Default\AppData\Roaming" -Forc
 Write-Host "Installing dotnet tools"
 Add-DefaultPathItem "%USERPROFILE%\.dotnet\tools"
 foreach ($dotnetTool in $dotnetToolset.tools) {
-    dotnet tool install $($dotnetTool.name) --tool-path "C:\Users\Default\.dotnet\tools" --add-source "https://api.nuget.org/v3/index.json" | Out-Null
+    $toolToInstall = $dotnetTool.name
+    if (-not ([string]::IsNullOrEmpty($dotnetTool.version))) {
+        $toolToInstall += " --version $($dotnetTool.version)"
+    }
+    dotnet tool install $toolToInstall --tool-path "C:\Users\Default\.dotnet\tools" --add-source "https://api.nuget.org/v3/index.json" | Out-Null
     if ($LastExitCode -ne 0) {
         throw "Dotnet tool install failed with exit code $LastExitCode"
     }

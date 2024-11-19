@@ -312,6 +312,7 @@
             "8.0"
         ],
         "tools": [
+            { "name": "azuresigntool", "version": "6.0.0", "test": "azuresigntool --version", "getversion": "azuresigntool --version" },
             { "name": "nbgv", "test": "nbgv --version", "getversion": "nbgv --version" }
         ],
         "warmup": false
